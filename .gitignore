@@ -1,9 +1,11 @@
 __pycache__/
 test*
+*old*
 
 *.jpg
 *.tif
 *.npy
 *.csv
+*.hdf5
 
 Literature/

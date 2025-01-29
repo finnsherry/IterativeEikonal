@@ -503,8 +503,8 @@ def geodesic_back_tracking_step(
     point_array = coordinate_real_to_array_ti(point, α_min, β_min, φ_min, dα, dβ, dφ)
     # Get gradient using componentwise trilinear interpolation.
     gradient_at_point_LI = vectorfield_trilinear_interpolate_LI(grad_W, point_array, G, cost)
-    α = scalar_trilinear_interpolate(αs, point_array)
-    φ = scalar_trilinear_interpolate(φs, point_array)
+    α = point[0]
+    φ = point[2]
     # Get gradient with respect to static frame.
     gradient_at_point = vector_LI_to_static(gradient_at_point_LI, α, φ)
     new_point = get_next_point(point, gradient_at_point, dα, dβ, dφ, dt)

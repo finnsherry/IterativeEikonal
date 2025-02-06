@@ -24,12 +24,15 @@ import diplib as dip
 import h5py
 from eikivp.utils import image_rescale
 
-
-def import_vesselness(image_name, scales, α, γ, ε, folder):
+def import_vesselness(params, folder):
     """
-    Import the vesselness matching the attributes `scales`, `α`, `γ`, `ε`,
-    and `image_name`.
+    Import the vesselness matching `params`.
     """
+    scales = params["scales"]
+    α = params["α"]
+    γ = params["γ"]
+    ε = params["ε"]
+    image_name = params["image_name"]
     vesselness_filename = f"{folder}\\R2_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}.hdf5"
     with h5py.File(vesselness_filename, "r") as vesselness_file:
         assert (
@@ -40,12 +43,17 @@ def import_vesselness(image_name, scales, α, γ, ε, folder):
             image_name == vesselness_file.attrs["image_name"]
         ), "There is a parameter mismatch!"
         V = vesselness_file["Vesselness"][()]
+    return V
         
-def export_vesselness(V, image_name, scales, α, γ, ε, folder):
+def export_vesselness(V, params, folder):
     """
-    Export the vesselness to hdf5 with attributes `scales`, `α`, `γ`, `ε`,
-    and `image_name` stored as metadata.
+    Export the vesselness to hdf5 with `params` stored as metadata.
     """
+    scales = params["scales"]
+    α = params["α"]
+    γ = params["γ"]
+    ε = params["ε"]
+    image_name = params["image_name"]
     vesselness_filename = f"{folder}\\R2_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}.hdf5"
     with h5py.File(vesselness_filename, "w") as vesselness_file:
         vesselness_file.create_dataset("Vesselness", data=V)

@@ -41,7 +41,7 @@ def import_γ_path(params, folder):
         σ_o = params["σ_o"]
         σ_s_ext = params["σ_s_ext"]
         σ_o_ext = params["σ_o_ext"]
-        geodesic_filename = f"{folder}\\M2_p_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_e={σ_s_ext}_s_o_e={σ_o_ext}_l={λ}_p={p}_G={[g for g in G]}_t={target_point}.hdf5"
+        geodesic_filename = f"{folder}\\M2_R_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_e={σ_s_ext}_s_o_e={σ_o_ext}_l={λ}_p={p}_G={[g for g in G]}_t={target_point}.hdf5"
         with h5py.File(geodesic_filename, "r") as geodesic_file:
             if "source_point" in params:
                 source_point = params["source_point"]
@@ -79,7 +79,7 @@ def import_γ_path(params, folder):
         α = params["α"]
         γ = params["γ"]
         ε = params["ε"]
-        geodesic_filename = f"{folder}\\M2_p_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}_l={λ}_p={p}_G={[g for g in G]}_t={target_point}.hdf5"
+        geodesic_filename = f"{folder}\\M2_R_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}_l={λ}_p={p}_G={[g for g in G]}_t={target_point}.hdf5"
         with h5py.File(geodesic_filename, "r") as geodesic_file:
             if "source_point" in params:
                 source_point = params["source_point"]
@@ -134,7 +134,7 @@ def export_γ_path(γ_path, params, folder):
         σ_o = params["σ_o"]
         σ_s_ext = params["σ_s_ext"]
         σ_o_ext = params["σ_o_ext"]
-        geodesic_filename = f"{folder}\\M2_p_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_e={σ_s_ext}_s_o_e={σ_o_ext}_l={λ}_p={p}_G={[g for g in G]}_t={target_point}.hdf5"
+        geodesic_filename = f"{folder}\\M2_R_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_e={σ_s_ext}_s_o_e={σ_o_ext}_l={λ}_p={p}_G={[g for g in G]}_t={target_point}.hdf5"
         with h5py.File(geodesic_filename, "w") as geodesic_file:
             geodesic_file.create_dataset("Geodesic", data=γ_path)
             geodesic_file.attrs["σ_s_list"] = σ_s_list
@@ -156,7 +156,7 @@ def export_γ_path(γ_path, params, folder):
         α = params["α"]
         γ = params["γ"]
         ε = params["ε"]
-        geodesic_filename = f"{folder}\\M2_p_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}_l={λ}_p={p}_G={[g for g in G]}_t={target_point}.hdf5"
+        geodesic_filename = f"{folder}\\M2_R_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}_l={λ}_p={p}_G={[g for g in G]}_t={target_point}.hdf5"
         with h5py.File(geodesic_filename, "w") as geodesic_file:
             geodesic_file.create_dataset("Geodesic", data=γ_path)
             geodesic_file.attrs["scales"] = scales

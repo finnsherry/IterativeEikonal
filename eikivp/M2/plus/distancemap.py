@@ -69,7 +69,7 @@ def import_W(params, folder):
         σ_o_ext = params["σ_o_ext"]
         if "source_point" in params:
             source_point = params["source_point"]
-            distance_filename = f"{folder}\\SE2_p_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_ext={σ_s_ext}_s_o_ext={σ_o_ext}_l={λ}_p={p}_x={ξ}_s={source_point}.hdf5"
+            distance_filename = f"{folder}\\M2_p_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_ext={σ_s_ext}_s_o_ext={σ_o_ext}_l={λ}_p={p}_x={ξ}_s={source_point}.hdf5"
             with h5py.File(distance_filename, "r") as distance_file:
                 assert (
                     np.all(σ_s_list == distance_file.attrs["σ_s_list"]) and
@@ -87,7 +87,7 @@ def import_W(params, folder):
                 grad_W = distance_file["Gradient"][()]
         else:
             source_points = params["source_points"]
-            distance_filename = f"{folder}\\SE2_p_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_ext={σ_s_ext}_s_o_ext={σ_o_ext}_l={λ}_p={p}_x={ξ}.hdf5"
+            distance_filename = f"{folder}\\M2_p_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_ext={σ_s_ext}_s_o_ext={σ_o_ext}_l={λ}_p={p}_x={ξ}.hdf5"
             with h5py.File(distance_filename, "r") as distance_file:
                 assert (
                     np.all(σ_s_list == distance_file.attrs["σ_s_list"]) and

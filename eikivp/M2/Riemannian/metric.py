@@ -2,7 +2,7 @@
     metric
     ======
 
-    Provides tools to deal with Riemannian metrics on SE(2). The primary methods
+    Provides tools to deal with Riemannian metrics on M2. The primary methods
     are:
       1. `invert_metric`: compute the matrix defining the dual metric from the
       matrix defining the primal metric.

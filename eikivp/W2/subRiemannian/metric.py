@@ -2,7 +2,7 @@
     metric
     ======
 
-    Provides tools to deal with sub-Riemannian metrics on SO(3). The primary
+    Provides tools to deal with sub-Riemannian metrics on W2. The primary
     methods are:
       1. `normalise_LI`: normalise a vector, given with respect to the left
       invariant frame, to norm 1 with respect to some data-driven sub-Riemannian

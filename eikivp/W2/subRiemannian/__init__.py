@@ -2,7 +2,7 @@
     Sub-Riemannian
     ==============
 
-    Solve the Eikonal PDE on SO(3) using a sub-Riemannian controller.
+    Solve the Eikonal PDE on W2 using a sub-Riemannian controller.
 
     Provides the following "top level" submodules:
       1. distancemap: compute the distance map (as solution of the Eikonal PDE)
@@ -18,7 +18,7 @@
 """
 
 # Access entire backend
-import eikivp.SO3.subRiemannian.distancemap
-import eikivp.SO3.subRiemannian.backtracking
-import eikivp.SO3.subRiemannian.interpolate
-import eikivp.SO3.subRiemannian.metric
+import eikivp.W2.subRiemannian.distancemap
+import eikivp.W2.subRiemannian.backtracking
+import eikivp.W2.subRiemannian.interpolate
+import eikivp.W2.subRiemannian.metric

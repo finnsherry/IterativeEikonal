@@ -3,7 +3,7 @@
     ===========
 
     Provides tools to interpolate vector fields, normalised to 1 with respect to
-    a sub-Riemannian metric, on SO(3). The primary methods are:
+    a sub-Riemannian metric, on W2. The primary methods are:
       1. `vectorfield_trilinear_interpolate_LI`: interpolate a vector field,
       with norm 1, given with respect to the left invariant frame, trilinearly
       at some point in the domain.
@@ -13,12 +13,12 @@
 """
 
 import taichi as ti
-from eikivp.SO3.utils import (
+from eikivp.W2.utils import (
     trilinear_interpolate,
     scalar_trilinear_interpolate,
     sanitize_index
 )
-from eikivp.SO3.subRiemannian.metric import (
+from eikivp.W2.subRiemannian.metric import (
     normalise_LI,
     normalise_static
 )

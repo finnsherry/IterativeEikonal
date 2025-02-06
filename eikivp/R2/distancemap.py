@@ -42,7 +42,6 @@ from eikivp.utils import (
     get_padded_cost,
     unpad_array
 )
-from eikivp.R2.costfunction import CostR2
 
 class DistanceR2():
     """
@@ -77,7 +76,7 @@ class DistanceR2():
           DOI:10.1137/15M1018460.
     """
 
-    def __init__(self, C: CostR2, G, source_point, target_point):
+    def __init__(self, C, G, source_point, target_point):
         # Vesselness attributes
         self.scales = C.scales
         self.α = C.α
@@ -92,7 +91,7 @@ class DistanceR2():
         self.source_point = source_point
         self.target_point = target_point
 
-    def compute_W(self, C: CostR2, dxy=1., n_max=1e5, n_max_initialisation=1e4, n_check=None,
+    def compute_W(self, C, dxy=1., n_max=1e5, n_max_initialisation=1e4, n_check=None,
                   n_check_initialisation=None, tol=1e-3, dε=1., initial_condition=100.):
         """
         Solve the Eikonal PDE on R2, with source at `source_point` and datadriven
@@ -241,7 +240,7 @@ class DistanceMultiSourceR2():
           DOI:10.1137/15M1018460.
     """
 
-    def __init__(self, C: CostR2, G, source_points):
+    def __init__(self, C, G, source_points):
         # Vesselness attributes
         self.scales = C.scales
         self.α = C.α
@@ -255,7 +254,7 @@ class DistanceMultiSourceR2():
         self.G = G
         self.source_points = source_points
 
-    def compute_W(self, C: CostR2, dxy=1., n_max=1e5, n_max_initialisation=1e4, n_check=None,
+    def compute_W(self, C, dxy=1., n_max=1e5, n_max_initialisation=1e4, n_check=None,
                   n_check_initialisation=None, tol=1e-3, dε=1., initial_condition=100.):
         """
         Solve the Eikonal PDE on R2, with source at `source_points` and

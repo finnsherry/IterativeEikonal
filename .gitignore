@@ -2,11 +2,13 @@ __pycache__/
 test*
 *old*
 eikivp.egg-info/
+.vscode/
 
 *.jpg
 *.tif
 *.npy
 *.csv
 *.hdf5
+*.txt
 
 Literature/

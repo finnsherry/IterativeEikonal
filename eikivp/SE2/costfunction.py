@@ -9,7 +9,6 @@
 
 from eikivp.utils import cost_function
 from eikivp.SE2.vesselness import VesselnessSE2
-from eikivp.R2.vesselness import VesselnessR2
 import numpy as np
 
 class CostSE2():
@@ -35,26 +34,26 @@ class CostSE2():
         `p`: vesselness exponent, taking values greater than 0.
     """
 
-    def __init__(self, V: VesselnessSE2 | VesselnessR2, λ, p, dim_K=32):
+    def __init__(self, V: VesselnessSE2, λ, p, dim_K=32):
         # Cost attributes
         self.λ = λ
         self.p = p
         self.image_name = V.image_name
         # Vesselness attributes
-        if isinstance(V, VesselnessR2):
-            self.domain_V = "R2"
-            self.σ_s_list = V.scales
-            self.σ_o = 0.
-            self.σ_s_ext = 0.
-            self.σ_o_ext = 0.
-            self.C = cost_function(V.V, λ, p)
-        elif isinstance(V, VesselnessSE2):
-            self.domain_V = "SE2"
-            self.σ_s_list = V.σ_s_list
-            self.σ_o = V.σ_o
-            self.σ_s_ext = V.σ_s_ext
-            self.σ_o_ext = V.σ_o_ext
-            self.C = cost_function(np.array([V.V]*dim_K).transpose(axes=(1, 2, 0)), λ, p)
+        # if isinstance(V, VesselnessR2):
+        #     self.domain_V = "R2"
+        #     self.σ_s_list = V.scales
+        #     self.σ_o = 0.
+        #     self.σ_s_ext = 0.
+        #     self.σ_o_ext = 0.
+        #     self.C = cost_function(V.V, λ, p)
+        # elif isinstance(V, VesselnessSE2):
+        self.domain_V = "SE2"
+        self.σ_s_list = V.σ_s_list
+        self.σ_o = V.σ_o
+        self.σ_s_ext = V.σ_s_ext
+        self.σ_o_ext = V.σ_o_ext
+        self.C = cost_function(np.array([V.V]*dim_K).transpose(axes=(1, 2, 0)), λ, p)
 
     def print(self):
         """Print attributes."""

@@ -21,7 +21,6 @@ from eikivp.R2.utils import (
     coordinate_array_to_real,
     coordinate_real_to_array_ti
 )
-from eikivp.R2.costfunction import CostR2
 from eikivp.R2.distancemap import (
     DistanceR2,
     DistanceMultiSourceR2
@@ -73,7 +72,7 @@ class GeodesicR2():
         # Geodesic attributes
         self.dt = dt
 
-    def compute_γ_path(self, W: DistanceR2, C: CostR2, x_min, y_min, dxy=1., n_max=2000):
+    def compute_γ_path(self, W: DistanceR2, C, x_min, y_min, dxy=1., n_max=2000):
         self.γ_path = geodesic_back_tracking(W.grad_W, self.source_point, self.target_point, C.C, x_min, y_min, dxy,
                                              G_np=self.G, dt=self.dt, n_max=n_max)
 
@@ -188,7 +187,7 @@ class GeodesicMultiSourceR2():
         # Geodesic attributes
         self.dt = dt
 
-    def compute_γ_path(self, W: DistanceMultiSourceR2, C: CostR2, x_min, y_min, dxy=1., n_max=2000):
+    def compute_γ_path(self, W: DistanceMultiSourceR2, C, x_min, y_min, dxy=1., n_max=2000):
         self.γ_path = geodesic_back_tracking_multi_source(W.grad_W, self.source_points, self.target_point, C.C, x_min,
                                                           y_min, dxy, G_np=self.G, dt=self.dt, n_max=n_max)
 

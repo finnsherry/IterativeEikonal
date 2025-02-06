@@ -2,14 +2,12 @@
     vesselness
     ==========
 
-    Provides tools compute vesselness scores on R^2. In particular, provides the
-    class `VesselnessR2`, which can compute the vesselness and store it with its
-    parameters.
-    
-    The available methods are:
-      1. `rc_vessel_enhancement`: compute the singlescale vesselness using a
+    Provides tools compute vesselness scores on R^2. The available methods are:
+      1. `vesselness`: compute the multiscale vesselness with preprocessing to
+      remove boundary effects.
+      2. `rc_vessel_enhancement`: compute the singlescale vesselness using a
       Frangi filter[1].
-      2. `multiscale_frangi_filter`: compute the multiscale vesselness by
+      3. `multiscale_frangi_filter`: compute the multiscale vesselness by
       applying the Frangi filter at numerous scales and combining the results
       via maximum projection.
       
@@ -26,99 +24,43 @@ import diplib as dip
 import h5py
 from eikivp.utils import image_rescale
 
-class VesselnessR2():
+
+def import_vesselness(image_name, scales, α, γ, ε, folder):
     """
-    The vesselness of a retinal image in R2 computed using multiscale Frangi
-    filters[1].
-
-    Attributes:
-        `V`: np.ndarray of vesselness data.
-        `scales`: iterable of standard deviations of Gaussian derivatives,
-          taking values greater than 0. 
-        `α`: anisotropy penalty, taking values between 0 and 1.
-        `γ`: variance sensitivity, taking values between 0 and 1.
-        `ε`: structure penalty, taking values between 0 and 1.
-        `image_name`: identifier of image used to generate vesselness.
-
-    References:
-        [1]: A. F. Frangi, W. J. Niessen, K. L. Vincken, and M. A. Viergever.
-        "Multiscale vessel enhancement filtering". In: Medical Image Computing
-        and Computer-Assisted Intervention (1998), pp. 130--137.
-        DOI:10.1007/BFb0056195.
+    Import the vesselness matching the attributes `scales`, `α`, `γ`, `ε`,
+    and `image_name`.
     """
-
-    def __init__(self, scales, α, γ, ε, image_name):
-        # Vesselness attributes
-        self.scales = scales
-        self.α = α
-        self.γ = γ
-        self.ε = ε
-        self.image_name = image_name
-
-    def compute_V(self, retinal_array):
-        """
-        Compute Frangi filter[1] of vessels in `retinal_array` at scales in `σs`.
-        Implementation adapted from "Code A - Vesselness in SE(2)".
-
-        Args:
-            `retinal_array`: np.ndarray of a grayscale image, taking values
-              between 0 and 1.
-
-        Returns:
-            np.ndarray of the vesselness of `image`, taking values between 0 and
-            1.
+    vesselness_filename = f"{folder}\\R2_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}.hdf5"
+    with h5py.File(vesselness_filename, "r") as vesselness_file:
+        assert (
+            np.all(scales == vesselness_file.attrs["scales"]) and
+            α == vesselness_file.attrs["α"] and
+            γ == vesselness_file.attrs["γ"] and
+            ε == vesselness_file.attrs["ε"] and
+            image_name == vesselness_file.attrs["image_name"]
+        ), "There is a parameter mismatch!"
+        V = vesselness_file["Vesselness"][()]
         
-        References:
-            [1]: A. F. Frangi, W. J. Niessen, K. L. Vincken, and M. A.
-              Viergever.
-              "Multiscale vessel enhancement filtering". In: Medical Image
-              Computing and Computer-Assisted Intervention (1998), pp. 130--137.
-              DOI:10.1007/BFb0056195.
-        """
-        V_unmasked = multiscale_frangi_filter(-retinal_array, self.scales, α=self.α, γ=self.γ, ε=self.ε)
-        mask = (retinal_array > 0) # Remove boundary
-        V_unnormalised = V_unmasked * sp.ndimage.binary_erosion(mask, iterations=int(np.ceil(self.scales.max() * 2)))
-        print(f"Before rescaling, vesselness is in [{V_unnormalised.min()}, {V_unnormalised.max()}].")
-        self.V = image_rescale(V_unnormalised)
+def export_vesselness(V, image_name, scales, α, γ, ε, folder):
+    """
+    Export the vesselness to hdf5 with attributes `scales`, `α`, `γ`, `ε`,
+    and `image_name` stored as metadata.
+    """
+    vesselness_filename = f"{folder}\\R2_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}.hdf5"
+    with h5py.File(vesselness_filename, "w") as vesselness_file:
+        vesselness_file.create_dataset("Vesselness", data=V)
+        vesselness_file.attrs["scales"] = scales
+        vesselness_file.attrs["α"] = α
+        vesselness_file.attrs["γ"] = γ
+        vesselness_file.attrs["ε"] = ε
+        vesselness_file.attrs["image_name"] = image_name
 
-    def import_V(self, folder):
-        """
-        Import the vesselness matching the attributes `scales`, `α`, `γ`, `ε`,
-        and `image_name`.
-        """
-        vesselness_filename = f"{folder}\\R2_ss={[s for s in self.scales]}_a={self.α}_g={self.γ}_e={self.ε}.hdf5"
-        with h5py.File(vesselness_filename, "r") as vesselness_file:
-            assert (
-                np.all(self.scales == vesselness_file.attrs["scales"]) and
-                self.α == vesselness_file.attrs["α"] and
-                self.γ == vesselness_file.attrs["γ"] and
-                self.ε == vesselness_file.attrs["ε"] and
-                self.image_name == vesselness_file.attrs["image_name"]
-            ), "There is a parameter mismatch!"
-            self.V = vesselness_file["Vesselness"][()]
-            
-    def export_V(self, folder):
-        """
-        Export the vesselness to hdf5 with attributes `scales`, `α`, `γ`, `ε`,
-        and `image_name` stored as metadata.
-        """
-        vesselness_filename = f"{folder}\\R2_ss={[s for s in self.scales]}_a={self.α}_g={self.γ}_e={self.ε}.hdf5"
-        with h5py.File(vesselness_filename, "w") as vesselness_file:
-            vesselness_file.create_dataset("Vesselness", data=self.V)
-            vesselness_file.attrs["scales"] = self.scales
-            vesselness_file.attrs["α"] = self.α
-            vesselness_file.attrs["γ"] = self.γ
-            vesselness_file.attrs["ε"] = self.ε
-            vesselness_file.attrs["image_name"] = self.image_name
-
-    def print(self):
-        """Print attributes."""
-        print(f"scales => {self.scales}")
-        print(f"α => {self.α}")
-        print(f"γ => {self.γ}")
-        print(f"ε => {self.ε}")
-        print(f"image_name => {self.image_name}")
-
+def vesselness(retinal_array, scales, α, γ, ε):
+    V_unmasked = multiscale_frangi_filter(-retinal_array, scales, α=α, γ=γ, ε=ε)
+    mask = (retinal_array > 0) # Remove boundary
+    V_unnormalised = V_unmasked * sp.ndimage.binary_erosion(mask, iterations=int(np.ceil(scales.max() * 2)))
+    print(f"Before rescaling, vesselness is in [{V_unnormalised.min()}, {V_unnormalised.max()}].")
+    return image_rescale(V_unnormalised)
 
 def rc_vessel_enhancement(image, σ, α=0.2, γ=0.75, ε=0.2):
     """

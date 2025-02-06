@@ -2,7 +2,7 @@
     metric
     ======
 
-    Provides tools to deal with Finsler functions on SE(2). The primary methods
+    Provides tools to deal with Finsler functions on M2. The primary methods
     are:
       1. `normalise_LI`: normalise a vector, given with respect to the left
       invariant frame, to norm 1 with respect to some data-driven Finsler

@@ -2,14 +2,10 @@
     distancemap
     ===========
 
-    Provides methods to compute the distance map on SE(2) with respect to
+    Provides methods to compute the distance map on M2 with respect to
     various metrics, by solving the Eikonal PDE using the iterative Initial
-    Value Problem (IVP) technique described by Bekkers et al.[1] In particular,
-    provides the class `DistanceSE2Plus`, which can compute the distance map and
-    its gradient, and store them with their parameters.
-    
-    The primary methods
-    are:
+    Value Problem (IVP) technique described by Bekkers et al.[1] The primary
+    methods are:
       1. `eikonal_solver`: solve the Eikonal PDE with respect to some
       data-driven left invariant plus controller, defined by a stiffness 
       parameter ξ, a plus softness ε, and a cost function. The stiffness 
@@ -36,11 +32,11 @@ import numpy as np
 import h5py
 import taichi as ti
 from tqdm import tqdm
-from eikivp.SE2.derivatives import (
+from eikivp.M2.derivatives import (
     upwind_A1,
     upwind_A3
 )
-from eikivp.SE2.utils import (
+from eikivp.M2.utils import (
     get_boundary_conditions,
     get_boundary_conditions_multi_source,
     check_convergence,
@@ -52,387 +48,192 @@ from eikivp.utils import (
     get_padded_cost,
     unpad_array
 )
-from eikivp.SE2.costfunction import CostSE2
 
-class DistanceSE2Plus():
+def import_W(params, folder):
     """
-    Solve the Eikonal PDE on SE(2) equipped with a datadriven left invariant 
-    Finsler function defined by `ξ` and `cost_np`, with source at 
-    `source_point`, using the iterative method described by Bekkers et al.[1]
-
-    Attributes:
-        `W`: np.ndarray of distance function data.
-        `grad_W`: np.ndarray of gradient of distance function data.
-        `σ_s_list`: standard deviations in pixels of the internal regularisation
-          in the spatial directions before taking derivatives.
-        `σ_o`: standard deviation in pixels of the internal regularisation
-          in the orientational direction before taking derivatives.
-        `σ_s_ext`: standard deviation in pixels of the external regularisation
-          in the spatial direction after taking derivatives.
-          Notably, this regularisation is NOT truly external, because it
-          commutes with the derivatives.
-        `σ_o_ext`: standard deviation in pixels of the internal regularisation
-          in the orientational direction after taking derivatives.
-          Notably, this regularisation is NOT truly external, because it
-          commutes with the derivatives.
-        `image_name`: identifier of image used to generate vesselness.
-        `λ`: Vesselness prefactor, taking values greater than 0.
-        `p`: Vesselness exponent, taking values greater than 0.
-        `ξ`: Stiffness of moving in the A1 direction compared to the A3
-          direction, taking values greater than 0.
-        `source_point`: Tuple[int] describing index of source point.
-        `target_point`: Tuple[int] describing index of target point. Defaults to
-          `None`. If `target_point` is provided, the algorithm will terminate
-          when the Hamiltonian has converged at `target_point`; otherwise it
-          will terminate when the Hamiltonian has converged throughout the
-          domain.
-    
-    References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
-          "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
-          In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
-          DOI:10.1137/15M1018460.
+    Import the distance and its gradient matching `params`.
     """
+    image_name = params["image_name"]
+    λ = params["λ"]
+    p = params["p"]
+    ξ = params["ξ"]
+    if "target_point" in params:
+        target_point = params["target_point"]
+    else:
+        target_point = "default"
+    cost_domain = params["cost_domain"]
+    if cost_domain == "M2":
+        σ_s_list = params["σ_s_list"]
+        σ_o = params["σ_o"]
+        σ_s_ext = params["σ_s_ext"]
+        σ_o_ext = params["σ_o_ext"]
+        if "source_point" in params:
+            source_point = params["source_point"]
+            distance_filename = f"{folder}\\SE2_p_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_ext={σ_s_ext}_s_o_ext={σ_o_ext}_l={λ}_p={p}_x={ξ}_s={source_point}.hdf5"
+            with h5py.File(distance_filename, "r") as distance_file:
+                assert (
+                    np.all(σ_s_list == distance_file.attrs["σ_s_list"]) and
+                    σ_o == distance_file.attrs["σ_o"] and
+                    σ_s_ext == distance_file.attrs["σ_s_ext"] and
+                    σ_o_ext == distance_file.attrs["σ_o_ext"] and
+                    image_name == distance_file.attrs["image_name"] and
+                    λ == distance_file.attrs["λ"] and
+                    p == distance_file.attrs["p"] and
+                    ξ == distance_file.attrs["ξ"] and
+                    np.all(source_point == distance_file.attrs["source_point"]) and
+                    np.all(target_point == distance_file.attrs["target_point"])
+                ), "There is a parameter mismatch!"
+                W = distance_file["Distance"][()]
+                grad_W = distance_file["Gradient"][()]
+        else:
+            source_points = params["source_points"]
+            distance_filename = f"{folder}\\SE2_p_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_ext={σ_s_ext}_s_o_ext={σ_o_ext}_l={λ}_p={p}_x={ξ}.hdf5"
+            with h5py.File(distance_filename, "r") as distance_file:
+                assert (
+                    np.all(σ_s_list == distance_file.attrs["σ_s_list"]) and
+                    σ_o == distance_file.attrs["σ_o"] and
+                    σ_s_ext == distance_file.attrs["σ_s_ext"] and
+                    σ_o_ext == distance_file.attrs["σ_o_ext"] and
+                    image_name == distance_file.attrs["image_name"] and
+                    λ == distance_file.attrs["λ"] and
+                    p == distance_file.attrs["p"] and
+                    ξ == distance_file.attrs["ξ"] and
+                    np.all(source_points == distance_file.attrs["source_points"]) and
+                    np.all(target_point == distance_file.attrs["target_point"])
+                ), "There is a parameter mismatch!"
+                W = distance_file["Distance"][()]
+                grad_W = distance_file["Gradient"][()]
+    elif cost_domain == "R2":
+        scales = params["scales"]
+        α = params["α"]
+        γ = params["γ"]
+        ε = params["ε"]
+        if "source_point" in params:
+            source_point = params["source_point"]
+            distance_filename = f"{folder}\\M2_p_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}_l={λ}_p={p}_x={ξ}_s={source_point}.hdf5"
+            with h5py.File(distance_filename, "r") as distance_file:
+                assert (
+                    np.all(scales == distance_file.attrs["scales"]) and
+                    α == distance_file.attrs["α"] and
+                    γ == distance_file.attrs["γ"] and
+                    ε == distance_file.attrs["ε"] and
+                    image_name == distance_file.attrs["image_name"] and
+                    λ == distance_file.attrs["λ"] and
+                    p == distance_file.attrs["p"] and
+                    ξ == distance_file.attrs["ξ"] and
+                    np.all(source_point == distance_file.attrs["source_point"]) and
+                    np.all(target_point == distance_file.attrs["target_point"])
+                ), "There is a parameter mismatch!"
+                W = distance_file["Distance"][()]
+                grad_W = distance_file["Gradient"][()]
+        else:
+            source_points = params["source_points"]
+            distance_filename = f"{folder}\\M2_p_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}_l={λ}_p={p}_x={ξ}.hdf5"
+            with h5py.File(distance_filename, "r") as distance_file:
+                assert (
+                    np.all(scales == distance_file.attrs["scales"]) and
+                    α == distance_file.attrs["α"] and
+                    γ == distance_file.attrs["γ"] and
+                    ε == distance_file.attrs["ε"] and
+                    image_name == distance_file.attrs["image_name"] and
+                    λ == distance_file.attrs["λ"] and
+                    p == distance_file.attrs["p"] and
+                    ξ == distance_file.attrs["ξ"] and
+                    np.all(source_points == distance_file.attrs["source_points"]) and
+                    np.all(target_point == distance_file.attrs["target_point"])
+                ), "There is a parameter mismatch!"
+                W = distance_file["Distance"][()]
+                grad_W = distance_file["Gradient"][()]
+    return W, grad_W
 
-    def __init__(self, C: CostSE2, ξ, source_point, target_point):
-        # Vesselness attributes
-        self.σ_s_list = C.σ_s_list
-        self.σ_o = C.σ_o
-        self.σ_s_ext = C.σ_s_ext
-        self.σ_o_ext = C.σ_o_ext
-        self.image_name = C.image_name
-        # Cost attributes
-        self.λ = C.λ
-        self.p = C.p
-        # Distance attributes
-        self.ξ = ξ
-        self.source_point = source_point
-        self.target_point = target_point
-
-    def compute_W(self, C: CostSE2, dxy, dθ, θs_np, plus_softness=0., n_max=1e5, n_max_initialisation=1e4, n_check=None,
-                  n_check_initialisation=None, tol=1e-3, dε=1., initial_condition=100.):
-        """
-        Solve the Eikonal PDE on SE(2) equipped with a datadriven left invariant 
-        Finsler function defined by `ξ` and `cost_np`, with source at 
-        `source_point`, using the iterative method described by Bekkers et al.[1]
-
-        Args:
-            `cost_np`: np.ndarray of cost function throughout domain, taking values
-              between 0 and 1, with shape [Nx, Ny, Nθ].
-            `source_point`: Tuple[int] describing index of source point in 
-              `cost_np`.
-            `ξ`: Stiffness of moving in the A1 direction compared to the A3
-              direction, taking values greater than 0.
-            `dxy`: Spatial step size, taking values greater than 0.
-            `dθ`: Orientational step size, taking values greater than 0.
-            `θs_np`: Orientation coordinate at every point in the grid on which
-              `cost_np` is sampled.
-          Optional:
-            `plus_softness`: Strength of the plus controller, taking values between
-              0 and 1. As `plus_softness` is decreased, motion in the reverse A1
-              direction is increasingly inhibited. For `plus_softness` 0, motion is
-              possibly exclusively in the forward A1 direction; for `plus_softness`
-              1, we recover the sub-Riemannian metric that is symmetric in the A1
-              direction. Defaults to 0.
-            `target_point`: Tuple[int] describing index of target point in
-              `cost_np`. Defaults to `None`. If `target_point` is provided, the
-              algorithm will terminate when the Hamiltonian has converged at
-              `target_point`; otherwise it will terminate when the Hamiltonian has
-              converged throughout the domain. 
-            `n_max`: Maximum number of iterations, taking positive values. Defaults 
-              to 1e5.
-            `n_max_initialisation`: Maximum number of iterations for the
-              initialisation, taking positive values. Defaults to 1e4.
-            `n_check`: Number of iterations between each convergence check, taking
-              positive values. Should be at most `n_max`. Defaults to `None`; if no
-              `n_check` is passed, convergence is only checked at `n_max`.
-            `n_check_initialisation`: Number of iterations between each convergence
-              check in the initialisation, taking positive values. Should be at most
-              `n_max_initialisation`. Defaults to `None`; if no
-              `n_check_initialisation` is passed, convergence is only checked at
-              `n_max_initialisation`.
-            `tol`: Tolerance for determining convergence of the Hamiltonian, taking
-              positive values. Defaults to 1e-3.
-            `dε`: Multiplier for varying the "time" step size, taking positive
-              values. Defaults to 1.
-            `initial_condition`: Initial value of the approximate distance map.
-              Defaults to 100.
-
-        Returns:
-            np.ndarray of (approximate) distance map with respect to the datadriven
-              left invariant metric tensor field described by `G_np` and `cost_np`.
-            np.ndarray of upwind gradient field of (approximate) distance map.
-
-        Notes:
-            The base Finsler function (i.e. with uniform cost), is given, for vector
-            v = v^i A_i at point p, by 
-              F(p, v)^2 = ξ^2 (v^1)_+^2 + (v^3)^2,
-            where (x)_+ := max{x, 0} is the positive part of x.
-        
-        References:
-            [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
-              "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
-              In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
-              DOI:10.1137/15M1018460.
-        """
-        W, grad_W = eikonal_solver(C.C, self.source_point, self.ξ, dxy, dθ, θs_np, plus_softness=plus_softness,
-                                   target_point=self.target_point, n_max=n_max,
-                                   n_max_initialisation=n_max_initialisation, n_check=n_check,
-                                   n_check_initialisation=n_check_initialisation, tol=tol, dε=dε,
-                                   initial_condition=initial_condition)
-        self.W = W
-        self.grad_W = grad_W
-
-    def import_W(self, folder):
-        """
-        Import the distance and its gradient matching the attributes `σ_s_list`,
-        `σ_o`, `σ_s_ext`, `σ_o_ext`, `image_name`, `λ`, `p`, `ξ`,
-        `source_point`, and `target_point`.
-        """
-        distance_filename = f"{folder}\\SE2_p_ss_s={[s for s in self.σ_s_list]}_s_o={self.σ_o}_s_s_ext={self.σ_s_ext}_s_o_ext={self.σ_o_ext}_l={self.λ}_p={self.p}_x={self.ξ}_s={self.source_point}.hdf5"
-        with h5py.File(distance_filename, "r") as distance_file:
-            assert (
-                np.all(self.σ_s_list == distance_file.attrs["σ_s_list"]) and
-                self.σ_o == distance_file.attrs["σ_o"] and
-                self.σ_s_ext == distance_file.attrs["σ_s_ext"] and
-                self.σ_o_ext == distance_file.attrs["σ_o_ext"] and
-                self.image_name == distance_file.attrs["image_name"] and
-                self.λ == distance_file.attrs["λ"] and
-                self.p == distance_file.attrs["p"] and
-                self.ξ == distance_file.attrs["ξ"] and
-                np.all(self.source_point == distance_file.attrs["source_point"]) and
-                (
-                    np.all(self.target_point == distance_file.attrs["target_point"]) or
-                    distance_file.attrs["target_point"] == "default"
-                )
-            ), "There is a parameter mismatch!"
-            self.W = distance_file["Distance"][()]
-            self.grad_W = distance_file["Gradient"][()]
-            
-    def export_W(self, folder):
-        """
-        Export the distance and its gradient to hdf5 with attributes `σ_s_list`,
-        `σ_o`, `σ_s_ext`, `σ_o_ext`, `image_name`, `λ`, `p`, `ξ`,
-        `source_point`, and `target_point` stored as metadata.
-        """
-        distance_filename = f"{folder}\\SE2_p_ss_s={[s for s in self.σ_s_list]}_s_o={self.σ_o}_s_s_ext={self.σ_s_ext}_s_o_ext={self.σ_o_ext}_l={self.λ}_p={self.p}_x={self.ξ}_s={self.source_point}.hdf5"
-        with h5py.File(distance_filename, "w") as distance_file:
-            distance_file.create_dataset("Distance", data=self.W)
-            distance_file.create_dataset("Gradient", data=self.grad_W)
-            distance_file.attrs["σ_s_list"] = self.σ_s_list
-            distance_file.attrs["σ_o"] = self.σ_o
-            distance_file.attrs["σ_s_ext"] = self.σ_s_ext
-            distance_file.attrs["σ_o_ext"] = self.σ_o_ext
-            distance_file.attrs["image_name"] = self.image_name
-            distance_file.attrs["λ"] = self.λ
-            distance_file.attrs["p"] = self.p
-            distance_file.attrs["ξ"] = self.ξ
-            distance_file.attrs["source_point"] = self.source_point
-            if self.target_point is None:
-                distance_file.attrs["target_point"] = "default"
-            else:
-                distance_file.attrs["target_point"] = self.target_point
-
-    def print(self):
-        """Print attributes."""
-        print(f"σ_s_list => {self.σ_s_list}")
-        print(f"σ_o => {self.σ_o}")
-        print(f"σ_s_ext => {self.σ_s_ext}")
-        print(f"σ_o_ext => {self.σ_o_ext}")
-        print(f"image_name => {self.image_name}")
-        print(f"λ => {self.λ}")
-        print(f"p => {self.p}")
-        print(f"ξ => {self.ξ}")
-        print(f"source_point => {self.source_point}")
-        print(f"target_point => {self.target_point}")
-
-class DistanceMultiSourceSE2Plus():
+def export_W(W, grad_W, params, folder):
     """
-    Solve the Eikonal PDE on SE(2) equipped with a datadriven left invariant 
-    Finsler function defined by `ξ` and `cost_np`, with source at 
-    `source_points`, using the iterative method described by Bekkers et al.[1]
-
-    Attributes:
-        `W`: np.ndarray of distance function data.
-        `grad_W`: np.ndarray of gradient of distance function data.
-        `σ_s_list`: standard deviations in pixels of the internal regularisation
-          in the spatial directions before taking derivatives.
-        `σ_o`: standard deviation in pixels of the internal regularisation
-          in the orientational direction before taking derivatives.
-        `σ_s_ext`: standard deviation in pixels of the external regularisation
-          in the spatial direction after taking derivatives.
-          Notably, this regularisation is NOT truly external, because it
-          commutes with the derivatives.
-        `σ_o_ext`: standard deviation in pixels of the internal regularisation
-          in the orientational direction after taking derivatives.
-          Notably, this regularisation is NOT truly external, because it
-          commutes with the derivatives.
-        `image_name`: identifier of image used to generate vesselness.
-        `λ`: Vesselness prefactor, taking values greater than 0.
-        `p`: Vesselness exponent, taking values greater than 0.
-        `ξ`: Stiffness of moving in the A1 direction compared to the A3
-          direction, taking values greater than 0.
-        `source_points`: Tuple[Tuple[int]] describing index of source points.
-        `target_point`: Tuple[int] describing index of target point. Defaults to
-          `None`. If `target_point` is provided, the algorithm will terminate
-          when the Hamiltonian has converged at `target_point`; otherwise it
-          will terminate when the Hamiltonian has converged throughout the
-          domain.
-    
-    References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
-          "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
-          In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
-          DOI:10.1137/15M1018460.
+    Export the distance and its gradient to hdf5 with `params` stored as metadata.
     """
+    image_name = params["image_name"]
+    λ = params["λ"]
+    p = params["p"]
+    ξ = params["ξ"]
+    if "target_point" in params:
+        target_point = params["target_point"]
+    else:
+        target_point = "default"
+    cost_domain = params["cost_domain"]
+    if cost_domain == "M2":
+        σ_s_list = params["σ_s_list"]
+        σ_o = params["σ_o"]
+        σ_s_ext = params["σ_s_ext"]
+        σ_o_ext = params["σ_o_ext"]
+        if "source_point" in params:
+            source_point = params["source_point"]
+            distance_filename = f"{folder}\\M2_p_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_ext={σ_s_ext}_s_o_ext={σ_o_ext}_l={λ}_p={p}_x={ξ}_s={source_point}.hdf5"
+            with h5py.File(distance_filename, "w") as distance_file:
+                distance_file.create_dataset("Distance", data=W)
+                distance_file.create_dataset("Gradient", data=grad_W)
+                distance_file.attrs["σ_s_list"] = σ_s_list
+                distance_file.attrs["σ_o"] = σ_o
+                distance_file.attrs["σ_s_ext"] = σ_s_ext
+                distance_file.attrs["σ_o_ext"] = σ_o_ext
+                distance_file.attrs["image_name"] = image_name
+                distance_file.attrs["λ"] = λ
+                distance_file.attrs["p"] = p
+                distance_file.attrs["ξ"] = ξ
+                distance_file.attrs["source_point"] = source_point
+                distance_file.attrs["target_point"] = target_point
+        else:
+            source_points = params["source_points"]
+            distance_filename = f"{folder}\\M2_p_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_ext={σ_s_ext}_s_o_ext={σ_o_ext}_l={λ}_p={p}_x={ξ}.hdf5"
+            with h5py.File(distance_filename, "w") as distance_file:
+                distance_file.create_dataset("Distance", data=W)
+                distance_file.create_dataset("Gradient", data=grad_W)
+                distance_file.attrs["σ_s_list"] = σ_s_list
+                distance_file.attrs["σ_o"] = σ_o
+                distance_file.attrs["σ_s_ext"] = σ_s_ext
+                distance_file.attrs["σ_o_ext"] = σ_o_ext
+                distance_file.attrs["image_name"] = image_name
+                distance_file.attrs["λ"] = λ
+                distance_file.attrs["p"] = p
+                distance_file.attrs["ξ"] = ξ
+                distance_file.attrs["source_points"] = source_points
+                distance_file.attrs["target_point"] = target_point
 
-    def __init__(self, C: CostSE2, ξ, source_points, target_point):
-        # Vesselness attributes
-        self.σ_s_list = C.σ_s_list
-        self.σ_o = C.σ_o
-        self.σ_s_ext = C.σ_s_ext
-        self.σ_o_ext = C.σ_o_ext
-        self.image_name = C.image_name
-        # Cost attributes
-        self.λ = C.λ
-        self.p = C.p
-        # Distance attributes
-        self.ξ = ξ
-        self.source_points = source_points
-        self.target_point = target_point
-
-    def compute_W(self, C: CostSE2, dxy, dθ, θs_np, plus_softness=0., n_max=1e5, n_max_initialisation=1e4, n_check=None,
-                  n_check_initialisation=None, tol=1e-3, dε=1., initial_condition=100.):
-        """
-        Solve the Eikonal PDE on SE(2) equipped with a datadriven left invariant 
-        Finsler function defined by `ξ` and `cost_np`, with source at 
-        `source_points`, using the iterative method described by Bekkers et al.[1]
-
-        Args:
-            `cost_np`: np.ndarray of cost function throughout domain, taking values
-              between 0 and 1, with shape [Nx, Ny, Nθ].
-            `dxy`: Spatial step size, taking values greater than 0.
-            `dθ`: Orientational step size, taking values greater than 0.
-            `θs_np`: Orientation coordinate at every point in the grid on which
-              `cost_np` is sampled.
-          Optional:
-            `plus_softness`: Strength of the plus controller, taking values between
-              0 and 1. As `plus_softness` is decreased, motion in the reverse A1
-              direction is increasingly inhibited. For `plus_softness` 0, motion is
-              possibly exclusively in the forward A1 direction; for `plus_softness`
-              1, we recover the sub-Riemannian metric that is symmetric in the A1
-              direction. Defaults to 0.
-            `target_point`: Tuple[int] describing index of target point in
-              `cost_np`. Defaults to `None`. If `target_point` is provided, the
-              algorithm will terminate when the Hamiltonian has converged at
-              `target_point`; otherwise it will terminate when the Hamiltonian has
-              converged throughout the domain. 
-            `n_max`: Maximum number of iterations, taking positive values. Defaults 
-              to 1e5.
-            `n_max_initialisation`: Maximum number of iterations for the
-              initialisation, taking positive values. Defaults to 1e4.
-            `n_check`: Number of iterations between each convergence check, taking
-              positive values. Should be at most `n_max`. Defaults to `None`; if no
-              `n_check` is passed, convergence is only checked at `n_max`.
-            `n_check_initialisation`: Number of iterations between each convergence
-              check in the initialisation, taking positive values. Should be at most
-              `n_max_initialisation`. Defaults to `None`; if no
-              `n_check_initialisation` is passed, convergence is only checked at
-              `n_max_initialisation`.
-            `tol`: Tolerance for determining convergence of the Hamiltonian, taking
-              positive values. Defaults to 1e-3.
-            `dε`: Multiplier for varying the "time" step size, taking positive
-              values. Defaults to 1.
-            `initial_condition`: Initial value of the approximate distance map.
-              Defaults to 100.
-
-        Returns:
-            np.ndarray of (approximate) distance map with respect to the datadriven
-              left invariant metric tensor field described by `G_np` and `cost_np`.
-            np.ndarray of upwind gradient field of (approximate) distance map.
-
-        Notes:
-            The base Finsler function (i.e. with uniform cost), is given, for vector
-            v = v^i A_i at point p, by 
-              F(p, v)^2 = ξ^2 (v^1)_+^2 + (v^3)^2,
-            where (x)_+ := max{x, 0} is the positive part of x.
-        
-        References:
-            [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
-              "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
-              In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
-              DOI:10.1137/15M1018460.
-        """
-        W, grad_W = eikonal_solver_multi_source(C.C, self.source_points, self.ξ, dxy, dθ, θs_np,
-                                                plus_softness=plus_softness, target_point=self.target_point,
-                                                n_max=n_max, n_max_initialisation=n_max_initialisation, n_check=n_check,
-                                                n_check_initialisation=n_check_initialisation, tol=tol, dε=dε,
-                                                initial_condition=initial_condition)
-        self.W = W
-        self.grad_W = grad_W
-
-    def import_W(self, folder):
-        """
-        Import the distance and its gradient matching the attributes `σ_s_list`,
-        `σ_o`, `σ_s_ext`, `σ_o_ext`, `image_name`, `λ`, `p`, `ξ`,
-        `source_points`, and `target_point`.
-        """
-        distance_filename = f"{folder}\\SE2_p_ss_s={[s for s in self.σ_s_list]}_s_o={self.σ_o}_s_s_ext={self.σ_s_ext}_s_o_ext={self.σ_o_ext}_l={self.λ}_p={self.p}_x={self.ξ}.hdf5"
-        with h5py.File(distance_filename, "r") as distance_file:
-            assert (
-                np.all(self.σ_s_list == distance_file.attrs["σ_s_list"]) and
-                self.σ_o == distance_file.attrs["σ_o"] and
-                self.σ_s_ext == distance_file.attrs["σ_s_ext"] and
-                self.σ_o_ext == distance_file.attrs["σ_o_ext"] and
-                self.image_name == distance_file.attrs["image_name"] and
-                self.λ == distance_file.attrs["λ"] and
-                self.p == distance_file.attrs["p"] and
-                self.ξ == distance_file.attrs["ξ"] and
-                np.all(self.source_points == distance_file.attrs["source_points"]) and
-                (
-                    np.all(self.target_point == distance_file.attrs["target_point"]) or
-                    distance_file.attrs["target_point"] == "default"
-                )
-            ), "There is a parameter mismatch!"
-            self.W = distance_file["Distance"][()]
-            self.grad_W = distance_file["Gradient"][()]
-            
-    def export_W(self, folder):
-        """
-        Export the distance and its gradient to hdf5 with attributes `σ_s_list`,
-        `σ_o`, `σ_s_ext`, `σ_o_ext`, `image_name`, `λ`, `p`, `ξ`,
-        `source_points`, and `target_point` stored as metadata.
-        """
-        distance_filename = f"{folder}\\SE2_p_ss_s={[s for s in self.σ_s_list]}_s_o={self.σ_o}_s_s_ext={self.σ_s_ext}_s_o_ext={self.σ_o_ext}_l={self.λ}_p={self.p}_x={self.ξ}.hdf5"
-        with h5py.File(distance_filename, "w") as distance_file:
-            distance_file.create_dataset("Distance", data=self.W)
-            distance_file.create_dataset("Gradient", data=self.grad_W)
-            distance_file.attrs["σ_s_list"] = self.σ_s_list
-            distance_file.attrs["σ_o"] = self.σ_o
-            distance_file.attrs["σ_s_ext"] = self.σ_s_ext
-            distance_file.attrs["σ_o_ext"] = self.σ_o_ext
-            distance_file.attrs["image_name"] = self.image_name
-            distance_file.attrs["λ"] = self.λ
-            distance_file.attrs["p"] = self.p
-            distance_file.attrs["ξ"] = self.ξ
-            distance_file.attrs["source_points"] = self.source_points
-            if self.target_point is None:
-                distance_file.attrs["target_point"] = "default"
-            else:
-                distance_file.attrs["target_point"] = self.target_point
-
-    def print(self):
-        """Print attributes."""
-        print(f"σ_s_list => {self.σ_s_list}")
-        print(f"σ_o => {self.σ_o}")
-        print(f"σ_s_ext => {self.σ_s_ext}")
-        print(f"σ_o_ext => {self.σ_o_ext}")
-        print(f"image_name => {self.image_name}")
-        print(f"λ => {self.λ}")
-        print(f"p => {self.p}")
-        print(f"ξ => {self.ξ}")
-        print(f"source points => {self.source_points}")
-        print(f"target point => {self.target_point}")
+    elif cost_domain == "R2":
+        scales = params["scales"]
+        α = params["α"]
+        γ = params["γ"]
+        ε = params["ε"]
+        if "source_point" in params:
+            source_point = params["source_point"]
+            distance_filename = f"{folder}\\M2_p_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}_l={λ}_p={p}_x={ξ}_s={source_point}.hdf5"
+            with h5py.File(distance_filename, "w") as distance_file:
+                distance_file.create_dataset("Distance", data=W)
+                distance_file.create_dataset("Gradient", data=grad_W)
+                distance_file.attrs["scales"] = scales
+                distance_file.attrs["α"] = α
+                distance_file.attrs["γ"] = γ
+                distance_file.attrs["ε"] = ε
+                distance_file.attrs["image_name"] = image_name
+                distance_file.attrs["λ"] = λ
+                distance_file.attrs["p"] = p
+                distance_file.attrs["ξ"] = ξ
+                distance_file.attrs["source_point"] = source_point
+                distance_file.attrs["target_point"] = target_point
+        else:
+            source_points = params["source_points"]
+            distance_filename = f"{folder}\\M2_p_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}_l={λ}_p={p}_x={ξ}.hdf5"
+            with h5py.File(distance_filename, "w") as distance_file:
+                distance_file.create_dataset("Distance", data=W)
+                distance_file.create_dataset("Gradient", data=grad_W)
+                distance_file.attrs["scales"] = scales
+                distance_file.attrs["α"] = α
+                distance_file.attrs["γ"] = γ
+                distance_file.attrs["ε"] = ε
+                distance_file.attrs["image_name"] = image_name
+                distance_file.attrs["λ"] = λ
+                distance_file.attrs["p"] = p
+                distance_file.attrs["ξ"] = ξ
+                distance_file.attrs["source_points"] = source_points
+                distance_file.attrs["target_point"] = target_point
 
 # Data-driven left invariant
 

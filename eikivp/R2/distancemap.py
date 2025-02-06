@@ -107,7 +107,10 @@ def export_distance(W, grad_W, params, folder):
     G = params["G"]
     if "source_point" in params:
         source_point = params["source_point"]
-        target_point = params["target_point"]
+        if "target_point" in params:
+            target_point = params["target_point"]
+        else:
+            target_point = "default"
         distance_filename = f"{folder}\\R2_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}_l={λ}_p={p}_G={[g for g in G]}_s={source_point}.hdf5"
         with h5py.File(distance_filename, "w") as distance_file:
             distance_file.create_dataset("Distance", data=W)
@@ -121,10 +124,7 @@ def export_distance(W, grad_W, params, folder):
             distance_file.attrs["p"] = p
             distance_file.attrs["G"] = G
             distance_file.attrs["source_point"] = source_point
-            if target_point is None:
-                distance_file.attrs["target_point"] = "default"
-            else:
-                distance_file.attrs["target_point"] = target_point
+            distance_file.attrs["target_point"] = target_point
     else:
         source_points = params["source_points"]
         distance_filename = f"{folder}\\R2_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}_l={λ}_p={p}_G={[g for g in G]}.hdf5"

@@ -2,7 +2,7 @@
     derivatives
     ===========
 
-    Provides a variety of derivative operators on SE(2), namely:
+    Provides a variety of derivative operators on M2, namely:
       1. `derivatives`: computes the forward and backward finite difference
       approximations of the A1-, A2, and A3-derivatives.
       2. `abs_derivatives`: computes the absolute value of the upwind
@@ -15,7 +15,7 @@
 
 import taichi as ti
 from eikivp.utils import select_upwind_derivative
-from eikivp.SE2.utils import scalar_trilinear_interpolate, sanitize_index
+from eikivp.M2.utils import scalar_trilinear_interpolate
 
 
 # All at once

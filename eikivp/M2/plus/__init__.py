@@ -2,7 +2,7 @@
     plus
     ====
 
-    Solve the Eikonal PDE on SE(2) using the plus controller.
+    Solve the Eikonal PDE on M2 using the plus controller.
 
     Provides the following "top level" submodules:
       1. distancemap: compute the distance map (as solution of the Eikonal PDE)
@@ -18,7 +18,7 @@
 """
 
 # Access entire backend
-import eikivp.SE2.plus.distancemap
-import eikivp.SE2.plus.backtracking
-import eikivp.SE2.plus.interpolate
-import eikivp.SE2.plus.metric
+import eikivp.M2.plus.distancemap
+import eikivp.M2.plus.backtracking
+import eikivp.M2.plus.interpolate
+import eikivp.M2.plus.metric

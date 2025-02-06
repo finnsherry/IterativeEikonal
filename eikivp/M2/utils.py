@@ -3,7 +3,7 @@
     =====
 
     Provides miscellaneous computational utilities that can be used with all
-    controllers on SE(2).
+    controllers on M2.
 """
 
 import numpy as np

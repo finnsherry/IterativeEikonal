@@ -30,7 +30,10 @@ def import_γ_path(params, folder):
     λ = params["λ"]
     p = params["p"]
     G = params["G"]
-    dt = params["dt"]
+    if "dt" in params:
+        dt = params["dt"]
+    else:
+        dt = "default"
     target_point = params["target_point"]
     if "source_point" in params:
         source_point = params["source_point"]
@@ -47,10 +50,7 @@ def import_γ_path(params, folder):
                 np.all(G == geodesic_file.attrs["G"]) and
                 np.all(source_point == geodesic_file.attrs["source_point"]) and
                 np.all(target_point == geodesic_file.attrs["target_point"]) and
-                (
-                    dt == geodesic_file.attrs["dt"] or
-                    geodesic_file.attrs["dt"] == "default"
-                )              
+                dt == geodesic_file.attrs["dt"]            
             ), "There is a parameter mismatch!"
             γ_path = geodesic_file["Geodesic"][()]
     else:

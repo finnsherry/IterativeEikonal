@@ -52,9 +52,12 @@ def import_distance(params, folder):
     λ = params["λ"]
     p = params["p"]
     G = params["G"]
+    if "target_point" in params:
+        target_point = params["target_point"]
+    else:
+        target_point = "default"
     if "source_point" in params:
         source_point = params["source_point"]
-        target_point = params["target_point"]
         distance_filename = f"{folder}\\R2_ss={[s for s in scales]}_a={α}_g={γ}_e={ε}_l={λ}_p={p}_G={[g for g in G]}_s={source_point}.hdf5"
         with h5py.File(distance_filename, "r") as distance_file:
             assert (
@@ -67,10 +70,7 @@ def import_distance(params, folder):
                 p == distance_file.attrs["p"] and
                 np.all(G == distance_file.attrs["G"]) and
                 np.all(source_point == distance_file.attrs["source_point"]) and
-                (
-                    np.all(target_point == distance_file.attrs["target_point"]) or
-                    distance_file.attrs["target_point"] == "default"
-                )
+                np.all(target_point == distance_file.attrs["target_point"])
             ), "There is a parameter mismatch!"
             W = distance_file["Distance"][()]
             grad_W = distance_file["Gradient"][()]

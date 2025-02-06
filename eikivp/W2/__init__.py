@@ -1,10 +1,10 @@
 """
-    SO3
-    ===
+    W2
+    ==
 
-    Solve the Eikonal PDE on SO(3).
+    Solve the Eikonal PDE on W2.
 
-    Contains three submodules for different controller types on SO(3), which
+    Contains three submodules for different controller types on W2, which
     each contain methods for solving the corresponding Eikonal PDE and computing
     geodesics:
       1. Riemannian.
@@ -12,14 +12,14 @@
       3. plus.
 
     Additionally, we have the following "internal" submodules:
-      1. derivatives: compute various derivatives of functions on SO(3).
+      1. derivatives: compute various derivatives of functions on W2.
       2. utils
 """
 
 # Access entire backend
-import eikivp.SO3.derivatives
-import eikivp.SO3.costfunction
-import eikivp.SO3.utils
-import eikivp.SO3.Riemannian
-import eikivp.SO3.subRiemannian
-import eikivp.SO3.plus
+import eikivp.W2.derivatives
+import eikivp.W2.costfunction
+import eikivp.W2.utils
+import eikivp.W2.Riemannian
+import eikivp.W2.subRiemannian
+import eikivp.W2.plus

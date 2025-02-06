@@ -2,7 +2,7 @@
     derivatives
     ===========
 
-    Provides a variety of derivative operators on SO(3), namely:
+    Provides a variety of derivative operators on W2, namely:
       1. `derivatives`: computes the forward and backward finite difference
       approximations of the B1-, B2, and B3-derivatives.
       2. `abs_derivatives`: computes the absolute value of the upwind
@@ -15,7 +15,7 @@
 
 import taichi as ti
 from eikivp.utils import select_upwind_derivative
-from eikivp.SO3.utils import scalar_trilinear_interpolate
+from eikivp.W2.utils import scalar_trilinear_interpolate
 
 
 # All at once

@@ -2,54 +2,30 @@
     costfunction
     ============
 
-    Compute the cost function on SO(3) by interpolating the cost function on
-    SE(2). In particular, provides the `CostSO3` class, which can compute the
-    cost function from a cost function on SE(2) and store it with its parameters.
+    Compute the cost function on W2 by interpolating the cost function on
+    M2.
 """
 
-import numpy as np
 import taichi as ti
-from eikivp.SO3.utils import Π_forward
+from eikivp.W2.utils import Π_forward
 from eikivp.M2.utils import(
     scalar_trilinear_interpolate,
     coordinate_real_to_array_ti
 )
 
-class CostSO3():
-    """
-    Compute the cost function on SO(3) by interpolating the cost function on
-    SE(2).
-
-    Attributes:
-        `C`: np.ndarray of cost function data.
-        `scales`: iterable of standard deviations of Gaussian derivatives,
-          taking values greater than 0. 
-        `α`: anisotropy penalty, taking values between 0 and 1.
-        `γ`: variance sensitivity, taking values between 0 and 1.
-        `ε`: structure penalty, taking values between 0 and 1.
-        `image_name`: identifier of image used to generate vesselness.
-        `λ`: vesselness prefactor, taking values greater than 0.
-        `p`: vesselness exponent, taking values greater than 0.
-    """
-
-    def __init__(self, V, λ, p, αs, βs, φs, a, c, x_min, y_min, θ_min, dxy, dθ):
-        return
-        # super().__init__(V, λ, p)
-        # # Cost function on SE(2).
-        # CSE2 = self.C
-        # # Interpolate SE(2) cost function.
-        # shape = CSE2.shape
-        # CSE2_ti = ti.field(dtype=ti.f32, shape=shape)
-        # CSE2_ti.from_numpy(CSE2)
-        # αs_ti = ti.field(dtype=ti.f32, shape=shape)
-        # αs_ti.from_numpy(αs)
-        # βs_ti = ti.field(dtype=ti.f32, shape=shape)
-        # βs_ti.from_numpy(βs)
-        # φs_ti = ti.field(dtype=ti.f32, shape=shape)
-        # φs_ti.from_numpy(φs)
-        # CSO3_ti = ti.field(dtype=ti.f32, shape=shape)
-        # interpolate_cost_function(CSE2_ti, αs_ti, βs_ti, φs_ti, a, c, x_min, y_min, θ_min, dxy, dθ, CSO3_ti)
-        # self.C = CSO3_ti.to_numpy()
+def cost(C_M2, αs, βs, φs, a, c, x_min, y_min, θ_min, dxy, dθ):
+    shape = C_M2.shape
+    C_M2_ti = ti.field(dtype=ti.f32, shape=shape)
+    C_M2_ti.from_numpy(C_M2)
+    αs_ti = ti.field(dtype=ti.f32, shape=shape)
+    αs_ti.from_numpy(αs)
+    βs_ti = ti.field(dtype=ti.f32, shape=shape)
+    βs_ti.from_numpy(βs)
+    φs_ti = ti.field(dtype=ti.f32, shape=shape)
+    φs_ti.from_numpy(φs)
+    CW2_ti = ti.field(dtype=ti.f32, shape=shape)
+    interpolate_cost_function(C_M2_ti, αs_ti, βs_ti, φs_ti, a, c, x_min, y_min, θ_min, dxy, dθ, CW2_ti)
+    return CW2_ti.to_numpy()
 
 
 @ti.kernel

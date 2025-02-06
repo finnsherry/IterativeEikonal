@@ -3,7 +3,7 @@
     =====
 
     Provides miscellaneous computational utilities that can be used on R^2,
-    SE(2), and SO(3).
+    M2, and W2.
 """
 
 import numpy as np

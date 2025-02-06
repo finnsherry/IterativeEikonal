@@ -196,7 +196,6 @@ def export_W(W, grad_W, params, folder):
                 distance_file.attrs["ξ"] = ξ
                 distance_file.attrs["source_points"] = source_points
                 distance_file.attrs["target_point"] = target_point
-
     elif cost_domain == "R2":
         scales = params["scales"]
         α = params["α"]

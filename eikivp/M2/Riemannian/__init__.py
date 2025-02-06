@@ -2,7 +2,7 @@
     Riemannian
     ==============
 
-    Solve the Eikonal PDE on SE(2) using a Riemannian controller.
+    Solve the Eikonal PDE on M2 using a Riemannian controller.
 
     Provides the following "top level" submodules:
       1. distancemap: compute the distance map (as solution of the Eikonal PDE)
@@ -19,7 +19,7 @@
 """
 
 # Access entire backend
-import eikivp.SE2.Riemannian.distancemap
-import eikivp.SE2.Riemannian.backtracking
-import eikivp.SE2.Riemannian.interpolate
-import eikivp.SE2.Riemannian.metric
+import eikivp.M2.Riemannian.distancemap
+import eikivp.M2.Riemannian.backtracking
+import eikivp.M2.Riemannian.interpolate
+import eikivp.M2.Riemannian.metric

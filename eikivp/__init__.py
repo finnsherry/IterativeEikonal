@@ -3,19 +3,19 @@
     ======
 
     The Python package *eikivp* contains methods to solve the Eikonal PDE on
-    R^2, SE(2), and SO(3) using the iterative Initial Value Problem (IVP)
+    R^2, M2, and W2 using the iterative Initial Value Problem (IVP)
     technique described in Bekkers et al. "A PDE approach to Data-Driven
     Sub-Riemannian Geodesics in SE(2)" (2015), and to find geodesics connecting
     points with respect to the distance map that solves the Eikonal PDE.
 
     One application in which we want to solve the Eikonal PDE and subsequently
     find geodesics connecting pairs of points is vascular tracking. This package
-    contains methods to construct data-driven metrics on R^2 and SE(2), based
+    contains methods to construct data-driven metrics on R^2 and M2, based
     on multiscale vesselness filters, that will lead to geodesics that 
     (hopefully) track vessels.
 
     Summary: compute distance map and geodesics with respect to data-driven 
-    metric on R^2, SE(2), and SO(3).
+    metric on R^2, M2, and W2.
 """
 
 # Access entire backend
@@ -23,7 +23,7 @@ import eikivp.utils
 import eikivp.visualisations
 import eikivp.orientationscore
 import eikivp.R2
-import eikivp.SE2
+import eikivp.M2
 
 # Most important functions are available at top level
 ## R2
@@ -33,34 +33,34 @@ from eikivp.R2.distancemap import eikonal_solver_multi_source as eikonal_solver_
 from eikivp.R2.distancemap import eikonal_solver_multi_source_uniform as eikonal_solver_multi_source_R2_uniform
 from eikivp.R2.backtracking import geodesic_back_tracking as geodesic_back_tracking_R2
 from eikivp.R2.backtracking import geodesic_back_tracking_multi_source as geodesic_back_tracking_multi_source_R2
-## SE2
+## M2
 ### Riemannian
-from eikivp.SE2.Riemannian.distancemap import eikonal_solver as eikonal_solver_SE2_Riemannian
-from eikivp.SE2.Riemannian.distancemap import eikonal_solver_uniform as eikonal_solver_SE2_Riemannian_uniform
-from eikivp.SE2.Riemannian.distancemap import eikonal_solver_multi_source as eikonal_solver_multi_source_SE2_Riemannian
-from eikivp.SE2.Riemannian.distancemap import eikonal_solver_multi_source_uniform as eikonal_solver_multi_source_SE2_Riemannian_uniform
-from eikivp.SE2.Riemannian.backtracking import geodesic_back_tracking as geodesic_back_tracking_SE2_Riemannian
-from eikivp.SE2.Riemannian.backtracking import geodesic_back_tracking_multi_source as geodesic_back_tracking_multi_source_SE2_Riemannian
+from eikivp.M2.Riemannian.distancemap import eikonal_solver as eikonal_solver_M2_Riemannian
+from eikivp.M2.Riemannian.distancemap import eikonal_solver_uniform as eikonal_solver_M2_Riemannian_uniform
+from eikivp.M2.Riemannian.distancemap import eikonal_solver_multi_source as eikonal_solver_multi_source_M2_Riemannian
+from eikivp.M2.Riemannian.distancemap import eikonal_solver_multi_source_uniform as eikonal_solver_multi_source_M2_Riemannian_uniform
+from eikivp.M2.Riemannian.backtracking import geodesic_back_tracking as geodesic_back_tracking_M2_Riemannian
+from eikivp.M2.Riemannian.backtracking import geodesic_back_tracking_multi_source as geodesic_back_tracking_multi_source_M2_Riemannian
 ### Sub-Riemannian
-from eikivp.SE2.subRiemannian.distancemap import eikonal_solver as eikonal_solver_SE2_sub_Riemannian
-from eikivp.SE2.subRiemannian.distancemap import eikonal_solver_uniform as eikonal_solver_SE2_sub_Riemannian_uniform
-from eikivp.SE2.subRiemannian.distancemap import eikonal_solver_multi_source as eikonal_solver_multi_source_SE2_sub_Riemannian
-from eikivp.SE2.subRiemannian.distancemap import eikonal_solver_multi_source_uniform as eikonal_solver_multi_source_SE2_sub_Riemannian_uniform
-from eikivp.SE2.subRiemannian.backtracking import geodesic_back_tracking as geodesic_back_tracking_SE2_sub_Riemannian
-from eikivp.SE2.subRiemannian.backtracking import geodesic_back_tracking_multi_source as geodesic_back_tracking_multi_source_SE2_sub_Riemannian
+from eikivp.M2.subRiemannian.distancemap import eikonal_solver as eikonal_solver_M2_sub_Riemannian
+from eikivp.M2.subRiemannian.distancemap import eikonal_solver_uniform as eikonal_solver_M2_sub_Riemannian_uniform
+from eikivp.M2.subRiemannian.distancemap import eikonal_solver_multi_source as eikonal_solver_multi_source_M2_sub_Riemannian
+from eikivp.M2.subRiemannian.distancemap import eikonal_solver_multi_source_uniform as eikonal_solver_multi_source_M2_sub_Riemannian_uniform
+from eikivp.M2.subRiemannian.backtracking import geodesic_back_tracking as geodesic_back_tracking_M2_sub_Riemannian
+from eikivp.M2.subRiemannian.backtracking import geodesic_back_tracking_multi_source as geodesic_back_tracking_multi_source_M2_sub_Riemannian
 ### Plus controller
-from eikivp.SE2.plus.distancemap import eikonal_solver as eikonal_solver_SE2_plus
-from eikivp.SE2.plus.distancemap import eikonal_solver_uniform as eikonal_solver_SE2_plus_uniform
-from eikivp.SE2.plus.distancemap import eikonal_solver_multi_source as eikonal_solver_multi_source_SE2_plus
-from eikivp.SE2.plus.distancemap import eikonal_solver_multi_source_uniform as eikonal_solver_multi_source_SE2_plus_uniform
-from eikivp.SE2.plus.backtracking import geodesic_back_tracking as geodesic_back_tracking_SE2_plus
-from eikivp.SE2.plus.backtracking import geodesic_back_tracking_multi_source as geodesic_back_tracking_multi_source_SE2_plus
+from eikivp.M2.plus.distancemap import eikonal_solver as eikonal_solver_M2_plus
+from eikivp.M2.plus.distancemap import eikonal_solver_uniform as eikonal_solver_M2_plus_uniform
+from eikivp.M2.plus.distancemap import eikonal_solver_multi_source as eikonal_solver_multi_source_M2_plus
+from eikivp.M2.plus.distancemap import eikonal_solver_multi_source_uniform as eikonal_solver_multi_source_M2_plus_uniform
+from eikivp.M2.plus.backtracking import geodesic_back_tracking as geodesic_back_tracking_M2_plus
+from eikivp.M2.plus.backtracking import geodesic_back_tracking_multi_source as geodesic_back_tracking_multi_source_M2_plus
 ### Single top level function to select any controller
-def eikonal_solver_SE2(cost, source_point, dxy, dθ, θs, controller="sub-Riemannian", G=None, ξ=None, plus_softness=0.,
-                       target_point=None, n_max=1e5, n_max_initialisation=1e4, n_check=None,
-                       n_check_initialisation=None, tol=1e-3, dε=1., initial_condition=100.):
+def eikonal_solver_M2(cost, source_point, dxy, dθ, θs, controller="sub-Riemannian", G=None, ξ=None, plus_softness=0.,
+                      target_point=None, n_max=1e5, n_max_initialisation=1e4, n_check=None,
+                      n_check_initialisation=None, tol=1e-3, dε=1., initial_condition=100.):
     """
-    Solve the Eikonal PDE on SE(2) equipped with a datadriven left invariant
+    Solve the Eikonal PDE on M2 equipped with a datadriven left invariant
     norm, with source at `source_point`, using the iterative method described by
     Bekkers et al.[1]
 
@@ -141,34 +141,34 @@ def eikonal_solver_SE2(cost, source_point, dxy, dθ, θs, controller="sub-Rieman
     if controller == "Riemannian":
         if G is None:
             raise ValueError(f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!")
-        W, grad_W = eikonal_solver_SE2_Riemannian(cost, source_point, G, dxy, dθ, θs, target_point=target_point,
-                                                  n_max=n_max, n_max_initialisation=n_max_initialisation,
-                                                  n_check=n_check, n_check_initialisation=n_check_initialisation,
-                                                  tol=tol, dε=dε, initial_condition=initial_condition)
+        W, grad_W = eikonal_solver_M2_Riemannian(cost, source_point, G, dxy, dθ, θs, target_point=target_point,
+                                                 n_max=n_max, n_max_initialisation=n_max_initialisation,
+                                                 n_check=n_check, n_check_initialisation=n_check_initialisation,
+                                                 tol=tol, dε=dε, initial_condition=initial_condition)
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!")
-        W, grad_W = eikonal_solver_SE2_sub_Riemannian(cost, source_point, ξ, dxy, dθ, θs, target_point=target_point,
-                                                      n_max=n_max, n_max_initialisation=n_max_initialisation,
-                                                      n_check=n_check, n_check_initialisation=n_check_initialisation,
-                                                      tol=tol, dε=dε, initial_condition=initial_condition)
+        W, grad_W = eikonal_solver_M2_sub_Riemannian(cost, source_point, ξ, dxy, dθ, θs, target_point=target_point,
+                                                     n_max=n_max, n_max_initialisation=n_max_initialisation,
+                                                     n_check=n_check, n_check_initialisation=n_check_initialisation,
+                                                     tol=tol, dε=dε, initial_condition=initial_condition)
     elif controller == "plus":
         if ξ is None:
             raise ValueError(f"When using the plus controller you must pass the the stiffness parameter ξ!")
-        W, grad_W = eikonal_solver_SE2_plus(cost, source_point, ξ, dxy, dθ, θs, plus_softness=plus_softness,
-                                            target_point=target_point, n_max=n_max,
-                                            n_max_initialisation=n_max_initialisation, n_check=n_check,
-                                            n_check_initialisation=n_check_initialisation, tol=tol, dε=dε,
-                                            initial_condition=initial_condition)
+        W, grad_W = eikonal_solver_M2_plus(cost, source_point, ξ, dxy, dθ, θs, plus_softness=plus_softness,
+                                           target_point=target_point, n_max=n_max,
+                                           n_max_initialisation=n_max_initialisation, n_check=n_check,
+                                           n_check_initialisation=n_check_initialisation, tol=tol, dε=dε,
+                                           initial_condition=initial_condition)
     else:
         raise ValueError(f"""Controller "{controller}" is not supported! Choose one of "Riemannian", "sub-Riemannian", or "plus".""")
     return W, grad_W
 
-def eikonal_solver_SE2_uniform(domain_shape, source_point, dxy, dθ, θs, controller="sub-Riemannian", G=None, ξ=None,
+def eikonal_solver_M2_uniform(domain_shape, source_point, dxy, dθ, θs, controller="sub-Riemannian", G=None, ξ=None,
                                plus_softness=0., target_point=None, n_max=1e5,n_check=None, tol=1e-3, dε=1.,
                                initial_condition=100.):
     """
-    Solve the Eikonal PDE on SE(2) equipped with a left invariant norm, with
+    Solve the Eikonal PDE on M equipped with a left invariant norm, with
     source at `source_point`, using the iterative method described by Bekkers et
     al.[1]
 
@@ -241,28 +241,28 @@ def eikonal_solver_SE2_uniform(domain_shape, source_point, dxy, dθ, θs, contro
     if controller == "Riemannian":
         if G is None:
             raise ValueError(f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!")
-        W, grad_W = eikonal_solver_SE2_Riemannian_uniform(domain_shape, source_point, G, dxy, dθ, θs,
-                                                          target_point=target_point, n_max=n_max, n_check=n_check,
-                                                          tol=tol, dε=dε, initial_condition=initial_condition)
+        W, grad_W = eikonal_solver_M2_Riemannian_uniform(domain_shape, source_point, G, dxy, dθ, θs,
+                                                         target_point=target_point, n_max=n_max, n_check=n_check,
+                                                         tol=tol, dε=dε, initial_condition=initial_condition)
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!")
-        W, grad_W = eikonal_solver_SE2_sub_Riemannian_uniform(domain_shape, source_point, ξ, dxy, dθ, θs,
-                                                              target_point=target_point, n_max=n_max, n_check=n_check,
-                                                              tol=tol, dε=dε, initial_condition=initial_condition)
+        W, grad_W = eikonal_solver_M2_sub_Riemannian_uniform(domain_shape, source_point, ξ, dxy, dθ, θs,
+                                                             target_point=target_point, n_max=n_max, n_check=n_check,
+                                                             tol=tol, dε=dε, initial_condition=initial_condition)
     elif controller == "plus":
         if ξ is None:
             raise ValueError(f"When using the plus controller you must pass the the stiffness parameter ξ!")
-        W, grad_W = eikonal_solver_SE2_plus_uniform(domain_shape, source_point, ξ, dxy, dθ, θs,
-                                                    plus_softness=plus_softness, target_point=target_point, n_max=n_max,
-                                                    n_check=n_check, tol=tol, dε=dε,
-                                                    initial_condition=initial_condition)
+        W, grad_W = eikonal_solver_M2_plus_uniform(domain_shape, source_point, ξ, dxy, dθ, θs,
+                                                   plus_softness=plus_softness, target_point=target_point, n_max=n_max,
+                                                   n_check=n_check, tol=tol, dε=dε,
+                                                   initial_condition=initial_condition)
     else:
         raise ValueError(f"""Controller "{controller}" is not supported! Choose one of "Riemannian", "sub-Riemannian", or "plus".""")
     return W, grad_W
 
-def geodesic_back_tracking_SE2(grad_W, source_point, target_point, cost, x_min, y_min, θ_min, dxy, dθ, θs,
-                               controller="sub-Riemannian", G=None, ξ=None, dt=1., n_max=10000):
+def geodesic_back_tracking_M2(grad_W, source_point, target_point, cost, x_min, y_min, θ_min, dxy, dθ, θs,
+                              controller="sub-Riemannian", G=None, ξ=None, dt=1., n_max=10000):
     """
     Find the geodesic connecting `target_point` to `source_point`, using 
     gradient descent back tracking, as described by Bekkers et al.[1]
@@ -320,28 +320,28 @@ def geodesic_back_tracking_SE2(grad_W, source_point, target_point, cost, x_min, 
     if controller == "Riemannian":
         if G is None:
             raise ValueError(f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!")
-        γ = geodesic_back_tracking_SE2_Riemannian(grad_W, source_point, target_point, cost, x_min, y_min, θ_min, dxy,
-                                                  dθ, θs, G, dt=dt, n_max=n_max)
+        γ = geodesic_back_tracking_M2_Riemannian(grad_W, source_point, target_point, cost, x_min, y_min, θ_min, dxy,
+                                                 dθ, θs, G, dt=dt, n_max=n_max)
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!")
-        γ = geodesic_back_tracking_SE2_sub_Riemannian(grad_W, source_point, target_point, cost, x_min, y_min, θ_min,
-                                                      dxy, dθ, θs, ξ, dt=dt, n_max=n_max)
+        γ = geodesic_back_tracking_M2_sub_Riemannian(grad_W, source_point, target_point, cost, x_min, y_min, θ_min,
+                                                     dxy, dθ, θs, ξ, dt=dt, n_max=n_max)
     elif controller == "plus":
         if ξ is None:
             raise ValueError(f"When using the plus controller you must pass the the stiffness parameter ξ!")
-        γ = geodesic_back_tracking_SE2_plus(grad_W, source_point, target_point, cost, x_min, y_min, θ_min, dxy, dθ, θs,
-                                            ξ, dt=dt, n_max=n_max)
+        γ = geodesic_back_tracking_M2_plus(grad_W, source_point, target_point, cost, x_min, y_min, θ_min, dxy, dθ, θs,
+                                           ξ, dt=dt, n_max=n_max)
     else:
         raise ValueError(f"""Controller "{controller}" is not supported! Choose one of "Riemannian", "sub-Riemannian", or "plus".""")
     return γ
 
 ### Single top level function to select any controller
-def eikonal_solver_multi_source_SE2(cost, source_points, dxy, dθ, θs, controller="sub-Riemannian", G=None, ξ=None,
-                                    plus_softness=0., target_point=None, n_max=1e5, n_max_initialisation=1e4,
-                                    n_check=None, n_check_initialisation=None, tol=1e-3, dε=1., initial_condition=100.):
+def eikonal_solver_multi_source_M2(cost, source_points, dxy, dθ, θs, controller="sub-Riemannian", G=None, ξ=None,
+                                   plus_softness=0., target_point=None, n_max=1e5, n_max_initialisation=1e4,
+                                   n_check=None, n_check_initialisation=None, tol=1e-3, dε=1., initial_condition=100.):
     """
-    Solve the Eikonal PDE on SE(2) equipped with a datadriven left invariant
+    Solve the Eikonal PDE on M2 equipped with a datadriven left invariant
     norm, with source at `source_points`, using the iterative method described by
     Bekkers et al.[1]
 
@@ -422,38 +422,38 @@ def eikonal_solver_multi_source_SE2(cost, source_points, dxy, dθ, θs, controll
     if controller == "Riemannian":
         if G is None:
             raise ValueError(f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!")
-        W, grad_W = eikonal_solver_multi_source_SE2_Riemannian(cost, source_points, G, dxy, dθ, θs,
-                                                               target_point=target_point, n_max=n_max,
-                                                               n_max_initialisation=n_max_initialisation,
-                                                               n_check=n_check,
-                                                               n_check_initialisation=n_check_initialisation, tol=tol,
-                                                               dε=dε, initial_condition=initial_condition)
+        W, grad_W = eikonal_solver_multi_source_M2_Riemannian(cost, source_points, G, dxy, dθ, θs,
+                                                              target_point=target_point, n_max=n_max,
+                                                              n_max_initialisation=n_max_initialisation,
+                                                              n_check=n_check,
+                                                              n_check_initialisation=n_check_initialisation, tol=tol,
+                                                              dε=dε, initial_condition=initial_condition)
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!")
-        W, grad_W = eikonal_solver_multi_source_SE2_sub_Riemannian(cost, source_points, ξ, dxy, dθ, θs,
-                                                                   target_point=target_point, n_max=n_max,
-                                                                   n_max_initialisation=n_max_initialisation,
-                                                                   n_check=n_check,
-                                                                   n_check_initialisation=n_check_initialisation,
-                                                                   tol=tol, dε=dε, initial_condition=initial_condition)
+        W, grad_W = eikonal_solver_multi_source_M2_sub_Riemannian(cost, source_points, ξ, dxy, dθ, θs,
+                                                                  target_point=target_point, n_max=n_max,
+                                                                  n_max_initialisation=n_max_initialisation,
+                                                                  n_check=n_check,
+                                                                  n_check_initialisation=n_check_initialisation,
+                                                                  tol=tol, dε=dε, initial_condition=initial_condition)
     elif controller == "plus":
         if ξ is None:
             raise ValueError(f"When using the plus controller you must pass the the stiffness parameter ξ!")
-        W, grad_W = eikonal_solver_multi_source_SE2_plus(cost, source_points, ξ, dxy, dθ, θs,
-                                                         plus_softness=plus_softness, target_point=target_point,
-                                                         n_max=n_max, n_max_initialisation=n_max_initialisation,
-                                                         n_check=n_check, n_check_initialisation=n_check_initialisation,
-                                                         tol=tol, dε=dε, initial_condition=initial_condition)
+        W, grad_W = eikonal_solver_multi_source_M2_plus(cost, source_points, ξ, dxy, dθ, θs,
+                                                        plus_softness=plus_softness, target_point=target_point,
+                                                        n_max=n_max, n_max_initialisation=n_max_initialisation,
+                                                        n_check=n_check, n_check_initialisation=n_check_initialisation,
+                                                        tol=tol, dε=dε, initial_condition=initial_condition)
     else:
         raise ValueError(f"""Controller "{controller}" is not supported! Choose one of "Riemannian", "sub-Riemannian", or "plus".""")
     return W, grad_W
 
-def eikonal_solver_multi_source_SE2_uniform(domain_shape, source_points, dxy, dθ, θs, controller="sub-Riemannian",
-                                            G=None, ξ=None, plus_softness=0., target_point=None, n_max=1e5,
-                                            n_check=None, tol=1e-3, dε=1., initial_condition=100.):
+def eikonal_solver_multi_source_M2_uniform(domain_shape, source_points, dxy, dθ, θs, controller="sub-Riemannian",
+                                           G=None, ξ=None, plus_softness=0., target_point=None, n_max=1e5,
+                                           n_check=None, tol=1e-3, dε=1., initial_condition=100.):
     """
-    Solve the Eikonal PDE on SE(2) equipped with a left invariant norm, with
+    Solve the Eikonal PDE on M2 equipped with a left invariant norm, with
     source at `source_point`, using the iterative method described by Bekkers et
     al.[1]
 
@@ -526,30 +526,30 @@ def eikonal_solver_multi_source_SE2_uniform(domain_shape, source_points, dxy, d�
     if controller == "Riemannian":
         if G is None:
             raise ValueError(f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!")
-        W, grad_W = eikonal_solver_multi_source_SE2_Riemannian_uniform(domain_shape, source_points, G, dxy, dθ, θs,
-                                                                       target_point=target_point, n_max=n_max,
-                                                                       n_check=n_check, tol=tol, dε=dε,
-                                                                       initial_condition=initial_condition)
+        W, grad_W = eikonal_solver_multi_source_M2_Riemannian_uniform(domain_shape, source_points, G, dxy, dθ, θs,
+                                                                      target_point=target_point, n_max=n_max,
+                                                                      n_check=n_check, tol=tol, dε=dε,
+                                                                      initial_condition=initial_condition)
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!")
-        W, grad_W = eikonal_solver_multi_source_SE2_sub_Riemannian_uniform(domain_shape, source_points, ξ, dxy, dθ, θs,
-                                                                           target_point=target_point, n_max=n_max,
-                                                                           n_check=n_check, tol=tol, dε=dε,
-                                                                           initial_condition=initial_condition)
+        W, grad_W = eikonal_solver_multi_source_M2_sub_Riemannian_uniform(domain_shape, source_points, ξ, dxy, dθ, θs,
+                                                                          target_point=target_point, n_max=n_max,
+                                                                          n_check=n_check, tol=tol, dε=dε,
+                                                                          initial_condition=initial_condition)
     elif controller == "plus":
         if ξ is None:
             raise ValueError(f"When using the plus controller you must pass the the stiffness parameter ξ!")
-        W, grad_W = eikonal_solver_multi_source_SE2_plus_uniform(domain_shape, source_points, ξ, dxy, dθ, θs,
-                                                                 plus_softness=plus_softness, target_point=target_point,
-                                                                 n_max=n_max, n_check=n_check, tol=tol, dε=dε,
-                                                                 initial_condition=initial_condition)
+        W, grad_W = eikonal_solver_multi_source_M2_plus_uniform(domain_shape, source_points, ξ, dxy, dθ, θs,
+                                                                plus_softness=plus_softness, target_point=target_point,
+                                                                n_max=n_max, n_check=n_check, tol=tol, dε=dε,
+                                                                initial_condition=initial_condition)
     else:
         raise ValueError(f"""Controller "{controller}" is not supported! Choose one of "Riemannian", "sub-Riemannian", or "plus".""")
     return W, grad_W
 
-def geodesic_back_tracking_multi_source_SE2(grad_W, source_points, target_point, cost, x_min, y_min, θ_min, dxy, dθ, θs,
-                                            controller="sub-Riemannian", G=None, ξ=None, dt=1., n_max=10000):
+def geodesic_back_tracking_multi_source_M2(grad_W, source_points, target_point, cost, x_min, y_min, θ_min, dxy, dθ, θs,
+                                           controller="sub-Riemannian", G=None, ξ=None, dt=1., n_max=10000):
     """
     Find the geodesic connecting `target_point` to `source_point`, using 
     gradient descent back tracking, as described by Bekkers et al.[1]
@@ -608,18 +608,18 @@ def geodesic_back_tracking_multi_source_SE2(grad_W, source_points, target_point,
     if controller == "Riemannian":
         if G is None:
             raise ValueError(f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!")
-        γ = geodesic_back_tracking_multi_source_SE2_Riemannian(grad_W, source_points, target_point, cost, x_min, y_min,
-                                                               θ_min, dxy, dθ, θs, G, dt=dt, n_max=n_max)
+        γ = geodesic_back_tracking_multi_source_M2_Riemannian(grad_W, source_points, target_point, cost, x_min, y_min,
+                                                              θ_min, dxy, dθ, θs, G, dt=dt, n_max=n_max)
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!")
-        γ = geodesic_back_tracking_multi_source_SE2_sub_Riemannian(grad_W, source_points, target_point, cost, x_min,
-                                                                   y_min, θ_min, dxy, dθ, θs, ξ, dt=dt, n_max=n_max)
+        γ = geodesic_back_tracking_multi_source_M2_sub_Riemannian(grad_W, source_points, target_point, cost, x_min,
+                                                                  y_min, θ_min, dxy, dθ, θs, ξ, dt=dt, n_max=n_max)
     elif controller == "plus":
         if ξ is None:
             raise ValueError(f"When using the plus controller you must pass the the stiffness parameter ξ!")
-        γ = geodesic_back_tracking_multi_source_SE2_plus(grad_W, source_points, target_point, cost, x_min, y_min, θ_min,
-                                                         dxy, dθ, θs, ξ, dt=dt, n_max=n_max)
+        γ = geodesic_back_tracking_multi_source_M2_plus(grad_W, source_points, target_point, cost, x_min, y_min, θ_min,
+                                                        dxy, dθ, θs, ξ, dt=dt, n_max=n_max)
     else:
         raise ValueError(f"""Controller "{controller}" is not supported! Choose one of "Riemannian", "sub-Riemannian", or "plus".""")
     return γ

@@ -10,13 +10,12 @@
 import numpy as np
 import taichi as ti
 from eikivp.SO3.utils import Π_forward
-from eikivp.SE2.utils import(
+from eikivp.M2.utils import(
     scalar_trilinear_interpolate,
     coordinate_real_to_array_ti
 )
-from eikivp.SE2.costfunction import CostSE2
 
-class CostSO3(CostSE2):
+class CostSO3():
     """
     Compute the cost function on SO(3) by interpolating the cost function on
     SE(2).
@@ -34,22 +33,23 @@ class CostSO3(CostSE2):
     """
 
     def __init__(self, V, λ, p, αs, βs, φs, a, c, x_min, y_min, θ_min, dxy, dθ):
-        super().__init__(V, λ, p)
-        # Cost function on SE(2).
-        CSE2 = self.C
-        # Interpolate SE(2) cost function.
-        shape = CSE2.shape
-        CSE2_ti = ti.field(dtype=ti.f32, shape=shape)
-        CSE2_ti.from_numpy(CSE2)
-        αs_ti = ti.field(dtype=ti.f32, shape=shape)
-        αs_ti.from_numpy(αs)
-        βs_ti = ti.field(dtype=ti.f32, shape=shape)
-        βs_ti.from_numpy(βs)
-        φs_ti = ti.field(dtype=ti.f32, shape=shape)
-        φs_ti.from_numpy(φs)
-        CSO3_ti = ti.field(dtype=ti.f32, shape=shape)
-        interpolate_cost_function(CSE2_ti, αs_ti, βs_ti, φs_ti, a, c, x_min, y_min, θ_min, dxy, dθ, CSO3_ti)
-        self.C = CSO3_ti.to_numpy()
+        return
+        # super().__init__(V, λ, p)
+        # # Cost function on SE(2).
+        # CSE2 = self.C
+        # # Interpolate SE(2) cost function.
+        # shape = CSE2.shape
+        # CSE2_ti = ti.field(dtype=ti.f32, shape=shape)
+        # CSE2_ti.from_numpy(CSE2)
+        # αs_ti = ti.field(dtype=ti.f32, shape=shape)
+        # αs_ti.from_numpy(αs)
+        # βs_ti = ti.field(dtype=ti.f32, shape=shape)
+        # βs_ti.from_numpy(βs)
+        # φs_ti = ti.field(dtype=ti.f32, shape=shape)
+        # φs_ti.from_numpy(φs)
+        # CSO3_ti = ti.field(dtype=ti.f32, shape=shape)
+        # interpolate_cost_function(CSE2_ti, αs_ti, βs_ti, φs_ti, a, c, x_min, y_min, θ_min, dxy, dθ, CSO3_ti)
+        # self.C = CSO3_ti.to_numpy()
 
 
 @ti.kernel

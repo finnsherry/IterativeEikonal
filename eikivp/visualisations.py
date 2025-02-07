@@ -12,7 +12,7 @@ from eikivp.R2.utils import (
     align_to_standard_array_axis_scalar_field,
     align_to_standard_array_axis_vector_field
 )
-from eikivp.SO3.utils import align_to_standard_array_axis_scalar_field as align_to_standard_array_axis_scalar_field_SO3
+from eikivp.W2.utils import align_to_standard_array_axis_scalar_field as align_to_standard_array_axis_scalar_field_W2
 
 
 def convert_array_to_image(image_array):
@@ -62,7 +62,7 @@ def plot_image_array(image_array, x_min, x_max, y_min, y_max, cmap="gray", figsi
     cbar = ax.imshow(image_array_aligned, cmap=cmap, extent=(x_min, x_max, y_min, y_max))
     return fig, ax, cbar
 
-def plot_image_array_SO3(image_array, α_min, α_max, β_min, β_max, cmap="gray", figsize=(10, 10), fig=None, ax=None):
+def plot_image_array_W2(image_array, α_min, α_max, β_min, β_max, cmap="gray", figsize=(10, 10), fig=None, ax=None):
     """Plot `image_array` as a heatmap."""
     if fig is None and ax is None:
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=figsize)
@@ -71,7 +71,7 @@ def plot_image_array_SO3(image_array, α_min, α_max, β_min, β_max, cmap="gray
         ax.set_xlim(β_max, β_min)
         ax.set_ylim(α_min, α_max)
 
-    image_array_aligned = align_to_standard_array_axis_scalar_field_SO3(np.expand_dims(image_array, axis=2)).squeeze(-1)
+    image_array_aligned = align_to_standard_array_axis_scalar_field_W2(np.expand_dims(image_array, axis=2)).squeeze(-1)
 
     cbar = ax.imshow(image_array_aligned, cmap=cmap, extent=(β_max, β_min, α_min, α_max))
     return fig, ax, cbar
@@ -97,7 +97,7 @@ def plot_contour(distance, xs, ys, levels=None, linestyles=None, figsize=(12, 10
     contour = ax.contour(xs_aligned, ys_aligned, distance_aligned, levels=levels, linestyles=linestyles)
     return fig, ax, contour
 
-def plot_contour_SO3(distance, αs, βs, levels=None, linestyles=None, figsize=(12, 10), fig=None, ax=None, α_min=None,
+def plot_contour_W2(distance, αs, βs, levels=None, linestyles=None, figsize=(12, 10), fig=None, ax=None, α_min=None,
                      α_max=None, β_min=None, β_max=None):
     """Plot the contours of the two-dimensional array `distance`."""
     if fig is None and ax is None:
@@ -111,9 +111,9 @@ def plot_contour_SO3(distance, αs, βs, levels=None, linestyles=None, figsize=(
         ax.set_xlim(β_max, β_min)
         ax.set_ylim(α_min, α_max)
 
-    αs_aligned = align_to_standard_array_axis_scalar_field_SO3(αs)
-    βs_aligned = align_to_standard_array_axis_scalar_field_SO3(βs)
-    distance_aligned = align_to_standard_array_axis_scalar_field_SO3(np.expand_dims(distance, axis=2)).squeeze(-1)
+    αs_aligned = align_to_standard_array_axis_scalar_field_W2(αs)
+    βs_aligned = align_to_standard_array_axis_scalar_field_W2(βs)
+    distance_aligned = align_to_standard_array_axis_scalar_field_W2(np.expand_dims(distance, axis=2)).squeeze(-1)
     
     contour = ax.contour(βs_aligned, αs_aligned, distance_aligned, levels=levels, linestyles=linestyles)
     return fig, ax, contour
@@ -138,7 +138,7 @@ def plot_isosurface(verts, faces, x_min, x_max, y_min, y_max, θ_min, θ_max, dx
                     label=label)
     return fig, ax
 
-def plot_isosurface_SO3(verts, faces, α_min, α_max, β_min, β_max, φ_min, φ_max, dα, dβ, dφ, alpha=0.5, label=None,
+def plot_isosurface_W2(verts, faces, α_min, α_max, β_min, β_max, φ_min, φ_max, dα, dβ, dφ, alpha=0.5, label=None,
                     figsize=(10, 10), fig=None, ax=None):
     """Plot the isosurface given by `verts` and `faces`."""
     if fig is None and ax is None:
@@ -211,7 +211,7 @@ def plot_scalar_field(scalar_field, xs, ys, levels=None, figsize=(12, 10), fig=N
     contour = ax.contourf(xs_aligned, ys_aligned, scalar_field_aligned, levels=levels)
     return fig, ax, contour
 
-def plot_vector_field_SO3(vector_field, αs, βs, color="red", figsize=(10, 10), fig=None, ax=None, α_min=None,
+def plot_vector_field_W2(vector_field, αs, βs, color="red", figsize=(10, 10), fig=None, ax=None, α_min=None,
                           α_max=None, β_min=None, β_max=None):
     """Streamplot of `vector_field`."""
     if fig is None and ax is None:
@@ -228,7 +228,7 @@ def plot_vector_field_SO3(vector_field, αs, βs, color="red", figsize=(10, 10),
     ax.streamplot(βs, αs, vector_field[..., 1], vector_field[..., 0], color=color)
     return fig, ax
 
-def plot_scalar_field_SO3(scalar_field, αs, βs, levels=None, figsize=(12, 10), fig=None, ax=None, α_min=None,
+def plot_scalar_field_W2(scalar_field, αs, βs, levels=None, figsize=(12, 10), fig=None, ax=None, α_min=None,
                           α_max=None, β_min=None, β_max=None):
     """Plot two-dimensional `scalar_field` using coloured in contours."""
     if fig is None and ax is None:

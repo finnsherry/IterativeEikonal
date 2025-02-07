@@ -64,6 +64,7 @@ def import_vesselness(params, folder):
             image_name == vesselness_file.attrs["image_name"]
         ), "There is a parameter mismatch!"
         V = vesselness_file["Vesselness"][()]
+    return V
         
 def export_vesselness(V, params, folder):
     """

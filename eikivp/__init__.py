@@ -3,10 +3,10 @@
     ======
 
     The Python package *eikivp* contains methods to solve the Eikonal PDE on
-    R^2, M2, and W2 using the iterative Initial Value Problem (IVP)
-    technique described in Bekkers et al. "A PDE approach to Data-Driven
-    Sub-Riemannian Geodesics in SE(2)" (2015), and to find geodesics connecting
-    points with respect to the distance map that solves the Eikonal PDE.
+    R^2, M2, and W2 [1] using the iterative Initial Value Problem (IVP)
+    technique first described in Bekkers et al.[2], and to find geodesics
+    connecting points with respect to the distance map that solves the Eikonal
+    PDE.
 
     One application in which we want to solve the Eikonal PDE and subsequently
     find geodesics connecting pairs of points is vascular tracking. This package
@@ -16,6 +16,16 @@
 
     Summary: compute distance map and geodesics with respect to data-driven 
     metric on R^2, M2, and W2.
+    
+    References:
+      [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+      "Crossing-Preserving Geodesic Tracking on Spherical Images."
+      In: Scale Space and Variational Methods in Computer Vision (2025), pp. .
+      DOI:.
+      [2]: E.J. Bekkers, R. Duits, A. Mashtakov, and G.R. Sanguinetti.
+      "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)."
+      In: SIAM Journal on Imaging Sciences (2015), pp. 2740--2770.
+      DOI:10.1137/15M1018460.
 """
 
 # Access entire backend
@@ -61,8 +71,8 @@ def eikonal_solver_M2(cost, source_point, dxy, dθ, θs, controller="sub-Riemann
                       n_check_initialisation=None, tol=1e-3, dε=1., initial_condition=100.):
     """
     Solve the Eikonal PDE on M2 equipped with a datadriven left invariant
-    norm, with source at `source_point`, using the iterative method described by
-    Bekkers et al.[1]
+    norm, with source at `source_point`, using the iterative method first
+    described by Bekkers et al.[2] and generalised in [1].
 
     Args:
         `cost`: np.ndarray of cost function throughout domain, taking values
@@ -133,7 +143,12 @@ def eikonal_solver_M2(cost, source_point, dxy, dθ, θs, controller="sub-Riemann
           where (x)_+ := max{x, 0} is the positive part of x.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -169,8 +184,8 @@ def eikonal_solver_M2_uniform(domain_shape, source_point, dxy, dθ, θs, control
                                initial_condition=100.):
     """
     Solve the Eikonal PDE on M equipped with a left invariant norm, with
-    source at `source_point`, using the iterative method described by Bekkers et
-    al.[1]
+    source at `source_point`, using the iterative method first
+    described by Bekkers et al.[2] and generalised in [1].
 
     Args:
         `domain_shape`: Tuple[int] describing the shape of the domain, namely
@@ -232,8 +247,13 @@ def eikonal_solver_M2_uniform(domain_shape, source_point, dxy, dθ, θs, control
             F(p, v)^2 = ξ^2 (v^1)_+^2 + (v^3)^2,
           where (x)_+ := max{x, 0} is the positive part of x.
     
-    References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+    References:    
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -265,7 +285,8 @@ def geodesic_back_tracking_M2(grad_W, source_point, target_point, cost, x_min, y
                               controller="sub-Riemannian", G=None, ξ=None, dt=1., n_max=10000):
     """
     Find the geodesic connecting `target_point` to `source_point`, using 
-    gradient descent back tracking, as described by Bekkers et al.[1]
+    gradient descent back tracking, as first described by Bekkers et al.[2] and
+    generalised in [1].
 
     Args:
         `grad_W`: np.ndarray of upwind gradient with respect to some cost of the
@@ -311,8 +332,13 @@ def geodesic_back_tracking_M2(grad_W, source_point, target_point, cost, x_min, y
             F(p, v)^2 = ξ^2 (v^1)_+^2 + (v^3)^2,
           where (x)_+ := max{x, 0} is the positive part of x.
     
-    References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+    References:    
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -342,8 +368,8 @@ def eikonal_solver_multi_source_M2(cost, source_points, dxy, dθ, θs, controlle
                                    n_check=None, n_check_initialisation=None, tol=1e-3, dε=1., initial_condition=100.):
     """
     Solve the Eikonal PDE on M2 equipped with a datadriven left invariant
-    norm, with source at `source_points`, using the iterative method described by
-    Bekkers et al.[1]
+    norm, with source at `source_points`, using the iterative method first
+    described by Bekkers et al.[2] and generalised in [1].
 
     Args:
         `cost`: np.ndarray of cost function throughout domain, taking values
@@ -413,8 +439,13 @@ def eikonal_solver_multi_source_M2(cost, source_points, dxy, dθ, θs, controlle
             F(p, v)^2 = ξ^2 (v^1)_+^2 + (v^3)^2,
           where (x)_+ := max{x, 0} is the positive part of x.
     
-    References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+    References:    
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -454,8 +485,8 @@ def eikonal_solver_multi_source_M2_uniform(domain_shape, source_points, dxy, dθ
                                            n_check=None, tol=1e-3, dε=1., initial_condition=100.):
     """
     Solve the Eikonal PDE on M2 equipped with a left invariant norm, with
-    source at `source_point`, using the iterative method described by Bekkers et
-    al.[1]
+    source at `source_point`, using the iterative method first
+    described by Bekkers et al.[2] and generalised in [1].
 
     Args:
         `domain_shape`: Tuple[int] describing the shape of the domain, namely
@@ -518,7 +549,12 @@ def eikonal_solver_multi_source_M2_uniform(domain_shape, source_points, dxy, dθ
           where (x)_+ := max{x, 0} is the positive part of x.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -552,7 +588,8 @@ def geodesic_back_tracking_multi_source_M2(grad_W, source_points, target_point, 
                                            controller="sub-Riemannian", G=None, ξ=None, dt=1., n_max=10000):
     """
     Find the geodesic connecting `target_point` to `source_point`, using 
-    gradient descent back tracking, as described by Bekkers et al.[1]
+    gradient descent back tracking, as first described by Bekkers et al.[2] and
+    generalised in [1].
 
     Args:
         `grad_W`: np.ndarray of upwind gradient with respect to some cost of the
@@ -600,7 +637,12 @@ def geodesic_back_tracking_multi_source_M2(grad_W, source_points, target_point, 
           where (x)_+ := max{x, 0} is the positive part of x.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -729,7 +771,12 @@ def eikonal_solver_W2(cost, source_point, dα, dβ, dφ, αs_np, φs_np, control
           where (x)_+ := max{x, 0} is the positive part of x.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -767,8 +814,8 @@ def eikonal_solver_W2_uniform(domain_shape, source_point, dα, dβ, dφ, αs_np,
                               dε=1., initial_condition=100.):
     """
     Solve the Eikonal PDE on W2 equipped with a left invariant norm, with
-    source at `source_point`, using the iterative method described by Bekkers et
-    al.[1]
+    source at `source_point`, using the iterative method first
+    described by Bekkers et al.[2] and generalised in [1].
 
     Args:
         `domain_shape`: Tuple[int] describing the shape of the domain, namely
@@ -837,7 +884,12 @@ def eikonal_solver_W2_uniform(domain_shape, source_point, dα, dβ, dφ, αs_np,
           where (x)_+ := max{x, 0} is the positive part of x.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -869,7 +921,8 @@ def geodesic_back_tracking_W2(grad_W, source_point, target_point, cost, α_min, 
                               controller="sub-Riemannian", G=None, ξ=None, dt=1., n_max=10000):
     """
     Find the geodesic connecting `target_point` to `source_point`, using 
-    gradient descent back tracking, as described by Bekkers et al.[1]
+    gradient descent back tracking, as first described by Bekkers et al.[2] and
+    generalised in [1].
 
     Args:
         `grad_W`: np.ndarray of upwind gradient with respect to some cost of the
@@ -920,7 +973,12 @@ def geodesic_back_tracking_W2(grad_W, source_point, target_point, cost, α_min, 
           where (x)_+ := max{x, 0} is the positive part of x.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -949,8 +1007,8 @@ def eikonal_solver_multi_source_W2(cost, source_points, dα, dβ, dφ, αs_np, �
                                    n_check=None, n_check_initialisation=None, tol=1e-3, dε=1., initial_condition=100.):
     """
     Solve the Eikonal PDE on W2 equipped with a datadriven left invariant
-    norm, with source at `source_points`, using the iterative method described by
-    Bekkers et al.[1]
+    norm, with source at `source_points`, using the iterative method first
+    described by Bekkers et al.[2] and generalised in [1].
 
     Args:
         `cost`: np.ndarray of cost function throughout domain, taking values
@@ -1027,7 +1085,12 @@ def eikonal_solver_multi_source_W2(cost, source_points, dα, dβ, dφ, αs_np, �
           where (x)_+ := max{x, 0} is the positive part of x.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -1068,8 +1131,8 @@ def eikonal_solver_multi_source_W2_uniform(domain_shape, source_points, dα, dβ
                                             initial_condition=100.):
     """
     Solve the Eikonal PDE on W2 equipped with a left invariant norm, with
-    source at `source_points`, using the iterative method described by Bekkers et
-    al.[1]
+    source at `source_points`, using the iterative method first
+    described by Bekkers et al.[2] and generalised in [1].
 
     Args:
         `domain_shape`: Tuple[int] describing the shape of the domain, namely
@@ -1138,7 +1201,12 @@ def eikonal_solver_multi_source_W2_uniform(domain_shape, source_points, dα, dβ
           where (x)_+ := max{x, 0} is the positive part of x.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -1173,7 +1241,8 @@ def geodesic_back_tracking_multi_source_W2(grad_W, source_points, target_point, 
                                            αs, φs, controller="sub-Riemannian", G=None, ξ=None, dt=1., n_max=10000):
     """
     Find the geodesic connecting `target_point` to `source_points`, using 
-    gradient descent back tracking, as described by Bekkers et al.[1]
+    gradient descent back tracking, as first described by Bekkers et al.[2] and
+    generalised in [1].
 
     Args:
         `grad_W`: np.ndarray of upwind gradient with respect to some cost of the
@@ -1225,7 +1294,12 @@ def geodesic_back_tracking_multi_source_W2(grad_W, source_points, target_point, 
           where (x)_+ := max{x, 0} is the positive part of x.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.

@@ -760,8 +760,8 @@ def align_to_standard_array_axis_vector_field(vector_field):
     return vector_field_aligned
 
 
-# Maps from SO(3) into SE(2).
-# Π_forward: SO(3) -> SE(2), (α, β, φ) |-> (x, y, θ)
+# Maps from W2 into M2.
+# Π_forward: W2 -> M2, (α, β, φ) |-> (x, y, θ)
 # To get the angle θ from φ, we consider what happens along horizontal curves:
 #   θ(t) = arg(dx_dt(t) + i dy_dt(t)).
 # We can now find that
@@ -773,7 +773,7 @@ def align_to_standard_array_axis_vector_field(vector_field):
 
 def Π_forward_np(α, β, φ, a, c):
     """
-    Map coordinates in SO(3) into SE(2), by projecting down from the sphere onto
+    Map coordinates in W2 into M2, by projecting down from the sphere onto
     a plane.
     
     Args:
@@ -785,7 +785,7 @@ def Π_forward_np(α, β, φ, a, c):
           around nodal point.
 
     Returns:
-        np.ndarray(shape=(3,)) of coordinates in SE(2).
+        np.ndarray(shape=(3,)) of coordinates in M2.
     """
     # π_forward: S2 -> R2
     cosα = np.cos(α)
@@ -803,7 +803,7 @@ def Π_forward_np(α, β, φ, a, c):
     dπ_forward_y_dα = -a * sinα * sinβ
     dπ_forward_y_dβ = a * cosα * cosβ + cosα**2
     
-    # Combine into Π_forward: SO(3) -> SE(2)
+    # Combine into Π_forward: W2 -> M2
     cosφ = np.cos(φ)
     sinφ = np.sin(φ)
 
@@ -828,7 +828,7 @@ def Π_forward(
     """
     @taichi.func
     
-    Map coordinates in SO(3) into SE(2), by projecting down from the sphere onto
+    Map coordinates in W2 into M2, by projecting down from the sphere onto
     a plane.
     
     Args:
@@ -840,7 +840,7 @@ def Π_forward(
           around nodal point.
 
     Returns:
-        ti.types.vector(n=3, dtype=[float]) of coordinates in SE(2).
+        ti.types.vector(n=3, dtype=[float]) of coordinates in M2.
     """
     # π_forward: S2 -> R2
     cosα = ti.math.cos(α)
@@ -858,7 +858,7 @@ def Π_forward(
     dπ_forward_y_dα = -a * sinα * sinβ
     dπ_forward_y_dβ = a * cosα * cosβ + cosα**2
     
-    # Combine into Π_forward: SO(3) -> SE(2)
+    # Combine into Π_forward: W2 -> M2
     cosφ = ti.math.cos(φ)
     sinφ = ti.math.sin(φ)
 

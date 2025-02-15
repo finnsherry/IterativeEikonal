@@ -30,7 +30,7 @@ def cost(C_M2, αs, βs, φs, a, c, x_min, y_min, θ_min, dxy, dθ):
 
 @ti.kernel
 def interpolate_cost_function(
-    cost_SE2: ti.template(),
+    cost_M2: ti.template(),
     αs: ti.template(),
     βs: ti.template(),
     φs: ti.template(),
@@ -41,13 +41,13 @@ def interpolate_cost_function(
     θ_min: ti.f32,
     dxy: ti.f32,
     dθ: ti.f32,
-    cost_SO3: ti.template()
+    cost_W2: ti.template()
 ):
     """
     @ti.kernel
 
-    Sample cost function `cost_SE2`, given as a volume sampled uniformly on
-    SE(2), as a volume in SO(3)
+    Sample cost function `cost_M2`, given as a volume sampled uniformly on
+    M2, as a volume in W2.
 
     Args:
         `αs`: α-coordinates at which we want to sample.
@@ -63,7 +63,7 @@ def interpolate_cost_function(
           taking values greater than 0.
         `dθ`: orientational resolution, taking values greater than 0.
     """
-    for I in ti.grouped(cost_SE2):
+    for I in ti.grouped(cost_M2):
         point = Π_forward(αs[I], βs[I], φs[I], a, c)
         index = coordinate_real_to_array_ti(point, x_min, y_min, θ_min, dxy, dθ)
-        cost_SO3[I] = scalar_trilinear_interpolate(cost_SE2, index)
+        cost_W2[I] = scalar_trilinear_interpolate(cost_M2, index)

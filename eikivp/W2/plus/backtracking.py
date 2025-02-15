@@ -3,11 +3,7 @@
     ============
 
     Provides methods to compute the geodesic, with respect to some distance map,
-    connecting two points in SO(3). In particular, provides the class
-    `GeodesicSO3Plus`, which can compute the geodesic and store it with its
-    parameters.
-     
-    The primary methods are:
+    connecting two points in W2. The primary methods are:
       1. `geodesic_back_tracking`: compute the geodesic using gradient descent.
       The gradient must be provided; it is computed along with the distance map
       by the corresponding methods in the distancemap module.
@@ -181,7 +177,8 @@ def geodesic_back_tracking(grad_W_np, source_point, target_point, cost_np, α_mi
                            φs_np, ξ, dt=1., n_max=10000):
     """
     Find the geodesic connecting `target_point` to `source_point`, using 
-    gradient descent back tracking, as described by Bekkers et al.[1]
+    gradient descent back tracking, as first described by Bekkers et al.[2] and
+    generalised in [1].
 
     Args:
         `grad_W_np`: np.ndarray of upwind gradient with respect to some cost of 
@@ -213,7 +210,12 @@ def geodesic_back_tracking(grad_W_np, source_point, target_point, cost_np, α_mi
         np.ndarray of geodesic connecting `target_point` to `source_point`.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -258,7 +260,8 @@ def geodesic_back_tracking_multi_source(grad_W_np, source_points, target_point, 
                                         dφ, αs_np, φs_np, ξ, dt=1., n_max=10000):
     """
     Find the geodesic connecting `target_point` to `source_points`, using 
-    gradient descent back tracking, as described by Bekkers et al.[1]
+    gradient descent back tracking, as first described by Bekkers et al.[2] and
+    generalised in [1].
 
     Args:
         `grad_W_np`: np.ndarray of upwind gradient with respect to some cost of 
@@ -291,7 +294,12 @@ def geodesic_back_tracking_multi_source(grad_W_np, source_points, target_point, 
         np.ndarray of geodesic connecting `target_point` to `source_point`.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -356,8 +364,9 @@ def geodesic_back_tracking_step(
     """
     @taichi.kernel
 
-    Find the geodesic connecting `target_point` to `source_point`, using
-    gradient descent backtracking, as described by Bekkers et al.[1]
+    Find the geodesic connecting `target_point` to `source_point`, using 
+    gradient descent back tracking, as first described by Bekkers et al.[2] and
+    generalised in [1].
 
     Args:
       Static:
@@ -384,7 +393,12 @@ def geodesic_back_tracking_step(
         Next point.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.

@@ -54,7 +54,7 @@ def import_vesselness(params, folder):
     σ_s_ext = params["σ_s_ext"]
     σ_o_ext = params["σ_o_ext"]
     image_name = params["image_name"]
-    vesselness_filename = f"{folder}\\SE2_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_ext={σ_s_ext}_s_o_ext={σ_o_ext}.hdf5"
+    vesselness_filename = f"{folder}\\M2_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_ext={σ_s_ext}_s_o_ext={σ_o_ext}.hdf5"
     with h5py.File(vesselness_filename, "r") as vesselness_file:
         assert (
             np.all(σ_s_list == vesselness_file.attrs["σ_s_list"]) and
@@ -75,7 +75,7 @@ def export_vesselness(V, params, folder):
     σ_s_ext = params["σ_s_ext"]
     σ_o_ext = params["σ_o_ext"]
     image_name = params["image_name"]
-    vesselness_filename = f"{folder}\\SE2_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_ext={σ_s_ext}_s_o_ext={σ_o_ext}.hdf5"
+    vesselness_filename = f"{folder}\\M2_ss_s={[s for s in σ_s_list]}_s_o={σ_o}_s_s_ext={σ_s_ext}_s_o_ext={σ_o_ext}.hdf5"
     with h5py.File(vesselness_filename, "w") as vesselness_file:
         vesselness_file.create_dataset("Vesselness", data=V)
         vesselness_file.attrs["σ_s_list"] = σ_s_list

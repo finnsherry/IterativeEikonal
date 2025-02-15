@@ -4,8 +4,8 @@
 
     Provides methods to compute the distance map on W2 with respect to a
     data-driven left invariant sub-Riemannian metric, by solving the Eikonal PDE
-    using the iterative Initial Value Problem (IVP) technique described by
-    Bekkers et al.[1] The primary methods are:
+    using the iterative Initial Value Problem (IVP) technique first described by
+    Bekkers et al.[2] and generalised in [1]. The primary methods are:
       1. `eikonal_solver`: solve the Eikonal PDE with respect to
       some data-driven left invariant sub-Riemannian metric, defined by a 
       stiffness parameter ξ a cost function. The stiffness parameter ξ fixes the
@@ -20,9 +20,13 @@
       B2-direction is inhibited.
     
     References:
-      [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
-      "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
-      In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
+      [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+      "Crossing-Preserving Geodesic Tracking on Spherical Images."
+      In: Scale Space and Variational Methods in Computer Vision (2025), pp. .
+      DOI:.
+      [2]: E.J. Bekkers, R. Duits, A. Mashtakov, and G.R. Sanguinetti.
+      "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)."
+      In: SIAM Journal on Imaging Sciences (2015), pp. 2740--2770.
       DOI:10.1137/15M1018460.
 """
 
@@ -238,9 +242,10 @@ def eikonal_solver(cost_np, source_point, ξ, dα, dβ, dφ, αs_np, φs_np, tar
                    n_max_initialisation=1e4, n_check=None, n_check_initialisation=None, tol=1e-3, dε=1.,
                    initial_condition=100.):
     """
-    Solve the Eikonal PDE on SO(3) equipped with a datadriven left invariant 
+    Solve the Eikonal PDE on W2 equipped with a datadriven left invariant 
     sub-Riemannian metric tensor field defined by `ξ` and `cost_np`, with source
-    at `source_point`, using the iterative method described by Bekkers et al.[1]
+    at `source_point`, using the iterative method first described by Bekkers et
+    al.[2] and generalised in [1].
 
     Args:
         `cost_np`: np.ndarray of cost function throughout domain, taking values
@@ -295,7 +300,12 @@ def eikonal_solver(cost_np, source_point, ξ, dα, dβ, dφ, αs_np, φs_np, tar
           G_p(v, w) = ξ^2 v^1 w^1 + v^3 w^3.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -369,9 +379,10 @@ def eikonal_solver_multi_source(cost_np, source_points, ξ, dα, dβ, dφ, αs_n
                                 n_max_initialisation=1e4, n_check=None, n_check_initialisation=None, tol=1e-3, dε=1.,
                                 initial_condition=100.):
     """
-    Solve the Eikonal PDE on SO(3) equipped with a datadriven left invariant 
+    Solve the Eikonal PDE on W2 equipped with a datadriven left invariant 
     sub-Riemannian metric tensor field defined by `ξ` and `cost_np`, with source
-    at `source_points`, using the iterative method described by Bekkers et al.[1]
+    at `source_points`, using the iterative method first described by Bekkers et
+    al.[2] and generalised in [1].
 
     Args:
         `cost_np`: np.ndarray of cost function throughout domain, taking values
@@ -426,7 +437,12 @@ def eikonal_solver_multi_source(cost_np, source_points, ξ, dα, dβ, dφ, αs_n
           G_p(v, w) = ξ^2 v^1 w^1 + v^3 w^3.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -519,7 +535,7 @@ def step_W(
     @taichi.kernel
 
     Update the (approximate) distance map `W` by a single step of the iterative 
-    method described by Bekkers et al.[1]
+    method first described by Bekkers et al.[2] and generalised in [1].
 
     Args:
       Static:
@@ -545,7 +561,12 @@ def step_W(
           place.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -619,9 +640,10 @@ def distance_gradient_field(
 def eikonal_solver_uniform(domain_shape, source_point, ξ, dα, dβ, dφ, αs_np, φs_np, target_point=None, n_max=1e5,
                            n_check=None, tol=1e-3, dε=1., initial_condition=100.):
     """
-    Solve the Eikonal PDE on SO(3) equipped with a datadriven left invariant 
+    Solve the Eikonal PDE on W2 equipped with a datadriven left invariant 
     metric tensor field defined by `ξ`, with source at `source_point`,
-    using the iterative method described by Bekkers et al.[1]
+    using the iterative method first described by Bekkers et al.[2] and
+    generalised in [1].
 
     Args:
         `domain_shape`: Tuple[int] describing the shape of the domain, namely
@@ -670,7 +692,12 @@ def eikonal_solver_uniform(domain_shape, source_point, ξ, dα, dβ, dφ, αs_np
           G_p(v, w) = ξ^2 v^1 w^2 + v^3 w^3.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -733,9 +760,10 @@ def eikonal_solver_uniform(domain_shape, source_point, ξ, dα, dβ, dφ, αs_np
 def eikonal_solver_multi_source_uniform(domain_shape, source_points, ξ, dα, dβ, dφ, αs_np, φs_np, target_point=None,
                                         n_max=1e5, n_check=None, tol=1e-3, dε=1., initial_condition=100.):
     """
-    Solve the Eikonal PDE on SO(3) equipped with a datadriven left invariant 
+    Solve the Eikonal PDE on W2 equipped with a datadriven left invariant 
     metric tensor field defined by `ξ`, with source at `source_points`,
-    using the iterative method described by Bekkers et al.[1]
+    using the iterative method first described by Bekkers et al.[2] and
+    generalised in [1].
 
     Args:
         `domain_shape`: Tuple[int] describing the shape of the domain, namely
@@ -784,7 +812,12 @@ def eikonal_solver_multi_source_uniform(domain_shape, source_points, ξ, dα, d�
           G_p(v, w) = ξ^2 v^1 w^2 + v^3 w^3.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.
@@ -867,7 +900,7 @@ def step_W_uniform(
     @taichi.kernel
 
     Update the (approximate) distance map `W` by a single step of the iterative 
-    method described by Bekkers et al.[1]
+    method first described by Bekkers et al.[2] and generalised in [1].
 
     Args:
       Static:
@@ -892,7 +925,12 @@ def step_W_uniform(
           place.
     
     References:
-        [1]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
+        [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
+          "Crossing-Preserving Geodesic Tracking on Spherical Images."
+          In: Scale Space and Variational Methods in Computer Vision (2025),
+          pp. .
+          DOI:.
+        [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
           DOI:10.1137/15M1018460.

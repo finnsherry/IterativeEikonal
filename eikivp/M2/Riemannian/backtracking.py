@@ -1,12 +1,12 @@
 """
-    backtracking
-    ============
+backtracking
+============
 
-    Provides methods to compute the geodesic, with respect to some distance map,
-    connecting two points in M2. The primary method is:
-      1. `geodesic_back_tracking`: compute the geodesic using gradient descent.
-      The gradient must be provided; it is computed along with the distance map
-      by the corresponding methods in the distancemap module.
+Provides methods to compute the geodesic, with respect to some distance map,
+connecting two points in M2. The primary method is:
+  1. `geodesic_back_tracking`: compute the geodesic using gradient descent.
+  The gradient must be provided; it is computed along with the distance map
+  by the corresponding methods in the distancemap module.
 """
 
 import numpy as np
@@ -19,8 +19,9 @@ from eikivp.M2.utils import (
     coordinate_real_to_array_ti,
     vector_LI_to_static,
     distance_in_pixels,
-    distance_in_pixels_multi_source
+    distance_in_pixels_multi_source,
 )
+
 
 def import_γ_path(params, folder):
     """
@@ -46,32 +47,32 @@ def import_γ_path(params, folder):
             if "source_point" in params:
                 source_point = params["source_point"]
                 assert (
-                    np.all(σ_s_list == geodesic_filename.attrs["σ_s_list"]) and
-                    σ_o == geodesic_filename.attrs["σ_o"] and
-                    σ_s_ext == geodesic_filename.attrs["σ_s_ext"] and
-                    σ_o_ext == geodesic_filename.attrs["σ_o_ext"] and
-                    image_name == geodesic_file.attrs["image_name"] and
-                    λ == geodesic_file.attrs["λ"] and
-                    p == geodesic_file.attrs["p"] and
-                    G == geodesic_file.attrs["G"] and
-                    np.all(source_point == geodesic_file.attrs["source_point"]) and
-                    np.all(target_point == geodesic_file.attrs["target_point"]) and
-                    dt == geodesic_file.attrs["dt"]
+                    np.all(σ_s_list == geodesic_filename.attrs["σ_s_list"])
+                    and σ_o == geodesic_filename.attrs["σ_o"]
+                    and σ_s_ext == geodesic_filename.attrs["σ_s_ext"]
+                    and σ_o_ext == geodesic_filename.attrs["σ_o_ext"]
+                    and image_name == geodesic_file.attrs["image_name"]
+                    and λ == geodesic_file.attrs["λ"]
+                    and p == geodesic_file.attrs["p"]
+                    and G == geodesic_file.attrs["G"]
+                    and np.all(source_point == geodesic_file.attrs["source_point"])
+                    and np.all(target_point == geodesic_file.attrs["target_point"])
+                    and dt == geodesic_file.attrs["dt"]
                 ), "There is a parameter mismatch!"
             elif "source_points" in params:
                 source_points = params["source_points"]
                 assert (
-                    np.all(σ_s_list == geodesic_filename.attrs["σ_s_list"]) and
-                    σ_o == geodesic_filename.attrs["σ_o"] and
-                    σ_s_ext == geodesic_filename.attrs["σ_s_ext"] and
-                    σ_o_ext == geodesic_filename.attrs["σ_o_ext"] and
-                    image_name == geodesic_file.attrs["image_name"] and
-                    λ == geodesic_file.attrs["λ"] and
-                    p == geodesic_file.attrs["p"] and
-                    G == geodesic_file.attrs["G"] and
-                    np.all(source_points == geodesic_file.attrs["source_points"]) and
-                    np.all(target_point == geodesic_file.attrs["target_point"]) and
-                    dt == geodesic_file.attrs["dt"]
+                    np.all(σ_s_list == geodesic_filename.attrs["σ_s_list"])
+                    and σ_o == geodesic_filename.attrs["σ_o"]
+                    and σ_s_ext == geodesic_filename.attrs["σ_s_ext"]
+                    and σ_o_ext == geodesic_filename.attrs["σ_o_ext"]
+                    and image_name == geodesic_file.attrs["image_name"]
+                    and λ == geodesic_file.attrs["λ"]
+                    and p == geodesic_file.attrs["p"]
+                    and G == geodesic_file.attrs["G"]
+                    and np.all(source_points == geodesic_file.attrs["source_points"])
+                    and np.all(target_point == geodesic_file.attrs["target_point"])
+                    and dt == geodesic_file.attrs["dt"]
                 ), "There is a parameter mismatch!"
             γ_path = geodesic_file["Geodesic"][()]
     else:
@@ -84,32 +85,32 @@ def import_γ_path(params, folder):
             if "source_point" in params:
                 source_point = params["source_point"]
                 assert (
-                    np.all(scales == geodesic_file.attrs["scales"]) and
-                    α == geodesic_file.attrs["α"] and
-                    γ == geodesic_file.attrs["γ"] and
-                    ε == geodesic_file.attrs["ε"] and
-                    image_name == geodesic_file.attrs["image_name"] and
-                    λ == geodesic_file.attrs["λ"] and
-                    p == geodesic_file.attrs["p"] and
-                    G == geodesic_file.attrs["G"] and
-                    np.all(source_point == geodesic_file.attrs["source_point"]) and
-                    np.all(target_point == geodesic_file.attrs["target_point"]) and
-                    dt == geodesic_file.attrs["dt"]
+                    np.all(scales == geodesic_file.attrs["scales"])
+                    and α == geodesic_file.attrs["α"]
+                    and γ == geodesic_file.attrs["γ"]
+                    and ε == geodesic_file.attrs["ε"]
+                    and image_name == geodesic_file.attrs["image_name"]
+                    and λ == geodesic_file.attrs["λ"]
+                    and p == geodesic_file.attrs["p"]
+                    and G == geodesic_file.attrs["G"]
+                    and np.all(source_point == geodesic_file.attrs["source_point"])
+                    and np.all(target_point == geodesic_file.attrs["target_point"])
+                    and dt == geodesic_file.attrs["dt"]
                 ), "There is a parameter mismatch!"
             elif "source_points" in params:
                 source_points = params["source_points"]
                 assert (
-                    np.all(scales == geodesic_file.attrs["scales"]) and
-                    α == geodesic_file.attrs["α"] and
-                    γ == geodesic_file.attrs["γ"] and
-                    ε == geodesic_file.attrs["ε"] and
-                    image_name == geodesic_file.attrs["image_name"] and
-                    λ == geodesic_file.attrs["λ"] and
-                    p == geodesic_file.attrs["p"] and
-                    G == geodesic_file.attrs["G"] and
-                    np.all(source_points == geodesic_file.attrs["source_points"]) and
-                    np.all(target_point == geodesic_file.attrs["target_point"]) and
-                    dt == geodesic_file.attrs["dt"]
+                    np.all(scales == geodesic_file.attrs["scales"])
+                    and α == geodesic_file.attrs["α"]
+                    and γ == geodesic_file.attrs["γ"]
+                    and ε == geodesic_file.attrs["ε"]
+                    and image_name == geodesic_file.attrs["image_name"]
+                    and λ == geodesic_file.attrs["λ"]
+                    and p == geodesic_file.attrs["p"]
+                    and G == geodesic_file.attrs["G"]
+                    and np.all(source_points == geodesic_file.attrs["source_points"])
+                    and np.all(target_point == geodesic_file.attrs["target_point"])
+                    and dt == geodesic_file.attrs["dt"]
                 ), "There is a parameter mismatch!"
             γ_path = geodesic_file["Geodesic"][()]
     return γ_path
@@ -174,15 +175,29 @@ def export_γ_path(γ_path, params, folder):
             else:
                 geodesic_file.attrs["source_points"] = params["source_points"]
 
-def geodesic_back_tracking(grad_W_np, source_point, target_point, cost_np, x_min, y_min, θ_min, dxy, dθ, θs_np, G_np,
-                           dt=1., n_max=10000):
+
+def geodesic_back_tracking(
+    grad_W_np,
+    source_point,
+    target_point,
+    cost_np,
+    x_min,
+    y_min,
+    θ_min,
+    dxy,
+    dθ,
+    θs_np,
+    G_np,
+    dt=1.0,
+    n_max=10000,
+):
     """
-    Find the geodesic connecting `target_point` to `source_point`, using 
+    Find the geodesic connecting `target_point` to `source_point`, using
     gradient descent back tracking, as first described by Bekkers et al.[2] and
     generalised in [1].
 
     Args:
-        `grad_W_np`: np.ndarray of upwind gradient with respect to some cost of 
+        `grad_W_np`: np.ndarray of upwind gradient with respect to some cost of
           the approximate distance map, with shape [Nx, Ny, Nθ, 3].
         `source_point`: Tuple[int] describing index of source point in `W_np`.
         `target_point`: Tuple[int] describing index of target point in `W_np`.
@@ -205,13 +220,13 @@ def geodesic_back_tracking(grad_W_np, source_point, target_point, cost_np, x_min
 
     Returns:
         np.ndarray of geodesic connecting `target_point` to `source_point`.
-    
+
     References:
         [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
           "Crossing-Preserving Geodesic Tracking on Spherical Images."
           In: Scale Space and Variational Methods in Computer Vision (2025),
-          pp. .
-          DOI:.
+          pp. 192--204.
+          DOI:10.1007/978-3-031-92369-2_15.
         [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
@@ -239,11 +254,13 @@ def geodesic_back_tracking(grad_W_np, source_point, target_point, cost_np, x_min
 
     point = target_point
     γ[0] = point
-    tol = 2. # Stop if we are within two pixels of the source.
+    tol = 2.0  # Stop if we are within two pixels of the source.
     n = 1
     distance = ti.math.inf
     while (distance >= tol) and (n < n_max - 1):
-        point = geodesic_back_tracking_step(grad_W, θs, point, G, cost, x_min, y_min, θ_min, dxy, dθ, dt)
+        point = geodesic_back_tracking_step(
+            grad_W, θs, point, G, cost, x_min, y_min, θ_min, dxy, dθ, dt
+        )
         distance = distance_in_pixels(point, source_point, dxy, dθ)
         γ[n] = point
         n += 1
@@ -253,15 +270,29 @@ def geodesic_back_tracking(grad_W_np, source_point, target_point, cost_np, x_min
     γ_np[-1] = source_point
     return γ_np
 
-def geodesic_back_tracking_multi_source(grad_W_np, source_points, target_point, cost_np, x_min, y_min, θ_min, dxy, dθ,
-                                        θs_np, G_np, dt=1., n_max=10000):
+
+def geodesic_back_tracking_multi_source(
+    grad_W_np,
+    source_points,
+    target_point,
+    cost_np,
+    x_min,
+    y_min,
+    θ_min,
+    dxy,
+    dθ,
+    θs_np,
+    G_np,
+    dt=1.0,
+    n_max=10000,
+):
     """
-    Find the geodesic connecting `target_point` to `source_point`, using 
+    Find the geodesic connecting `target_point` to `source_point`, using
     gradient descent back tracking, as first described by Bekkers et al.[2] and
     generalised in [1].
 
     Args:
-        `grad_W_np`: np.ndarray of upwind gradient with respect to some cost of 
+        `grad_W_np`: np.ndarray of upwind gradient with respect to some cost of
           the approximate distance map, with shape [Nx, Ny, Nθ, 3].
         `source_points`: Tuple[Tuple[int]] describing index of source point in
           `W_np`.
@@ -285,13 +316,13 @@ def geodesic_back_tracking_multi_source(grad_W_np, source_points, target_point, 
 
     Returns:
         np.ndarray of geodesic connecting `target_point` to `source_point`.
-    
+
     References:
         [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
           "Crossing-Preserving Geodesic Tracking on Spherical Images."
           In: Scale Space and Variational Methods in Computer Vision (2025),
-          pp. .
-          DOI:.
+          pp. 192--204.
+          DOI:10.1007/978-3-031-92369-2_15.
         [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
@@ -307,7 +338,12 @@ def geodesic_back_tracking_multi_source(grad_W_np, source_points, target_point, 
     cost = ti.field(dtype=ti.f32, shape=shape)
     cost.from_numpy(cost_np)
     # We perform backtracking in real coordinates instead of in array indices.
-    source_points_np = np.array(tuple(coordinate_array_to_real(*p, x_min, y_min, θ_min, dxy, dθ) for p in source_points))
+    source_points_np = np.array(
+        tuple(
+            coordinate_array_to_real(*p, x_min, y_min, θ_min, dxy, dθ)
+            for p in source_points
+        )
+    )
     N_source_points = len(source_points)
     source_points = ti.Vector.field(n=3, shape=(N_source_points,), dtype=ti.f32)
     source_points.from_numpy(source_points_np)
@@ -322,12 +358,16 @@ def geodesic_back_tracking_multi_source(grad_W_np, source_points, target_point, 
 
     point = target_point
     γ[0] = point
-    tol = 2. # Stop if we are within two pixels of the source.
+    tol = 2.0  # Stop if we are within two pixels of the source.
     n = 1
     min_distance = ti.math.inf
     while (min_distance >= tol) and (n < n_max - 1):
-        point = geodesic_back_tracking_step(grad_W, θs, point, G, cost, x_min, y_min, θ_min, dxy, dθ, dt)
-        min_distance = distance_in_pixels_multi_source(point, source_points, distances, dxy, dθ)
+        point = geodesic_back_tracking_step(
+            grad_W, θs, point, G, cost, x_min, y_min, θ_min, dxy, dθ, dt
+        )
+        min_distance = distance_in_pixels_multi_source(
+            point, source_points, distances, dxy, dθ
+        )
         γ[n] = point
         n += 1
     γ_len = n
@@ -336,6 +376,7 @@ def geodesic_back_tracking_multi_source(grad_W_np, source_points, target_point, 
     distances = distances.to_numpy()
     γ_np[-1] = source_points_np[np.argmin(distances)]
     return γ_np
+
 
 @ti.kernel
 def geodesic_back_tracking_step(
@@ -349,12 +390,12 @@ def geodesic_back_tracking_step(
     θ_min: ti.f32,
     dxy: ti.f32,
     dθ: ti.f32,
-    dt: ti.f32
+    dt: ti.f32,
 ) -> ti.types.vector(3, ti.f32):
     """
     @taichi.kernel
 
-    Find the geodesic connecting `target_point` to `source_point`, using 
+    Find the geodesic connecting `target_point` to `source_point`, using
     gradient descent back tracking, as first described by Bekkers et al.[2] and
     generalised in [1].
 
@@ -378,13 +419,13 @@ def geodesic_back_tracking_step(
 
     Returns:
         Next point.
-    
+
     References:
         [1]: N.J. van den Berg, F.M. Sherry, T.T.J.M. Berendschot, and R. Duits.
           "Crossing-Preserving Geodesic Tracking on Spherical Images."
           In: Scale Space and Variational Methods in Computer Vision (2025),
-          pp. .
-          DOI:.
+          pp. 192--204.
+          DOI:10.1007/978-3-031-92369-2_15.
         [2]: E. J. Bekkers, R. Duits, A. Mashtakov, and G. R. Sanguinetti.
           "A PDE Approach to Data-Driven Sub-Riemannian Geodesics in SE(2)".
           In: SIAM Journal on Imaging Sciences 8.4 (2015), pp. 2740--2770.
@@ -393,7 +434,9 @@ def geodesic_back_tracking_step(
     # To get the gradient, we need the corresponding array indices.
     point_array = coordinate_real_to_array_ti(point, x_min, y_min, θ_min, dxy, dθ)
     # Get gradient using componentwise trilinear interpolation.
-    gradient_at_point_LI = vectorfield_trilinear_interpolate_LI(grad_W, point_array, G, cost)
+    gradient_at_point_LI = vectorfield_trilinear_interpolate_LI(
+        grad_W, point_array, G, cost
+    )
     θ = point[2]
     # Get gradient with respect to static frame.
     gradient_at_point = vector_LI_to_static(gradient_at_point_LI, θ)

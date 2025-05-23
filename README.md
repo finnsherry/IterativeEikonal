@@ -30,7 +30,7 @@ pip install -e .
 ## Cite
 If you use this code in your own work, please cite our paper:
 
-<a id="1">[1]</a> van den Berg, N.J. and Sherry, F.M. and Berendschot, T.T.J.M. and Duits, R. "Crossing-Preserving Geodesic Tracking on Spherical Images." 10th International Conference on Scale Space and Variational Methods in Computer Vision (SSVM) (2025).
+<a id="1">[1]</a> van den Berg, N.J. and Sherry, F.M. and Berendschot, T.T.J.M. and Duits, R. "Crossing-Preserving Geodesic Tracking on Spherical Images." 10th International Conference on Scale Space and Variational Methods in Computer Vision (SSVM) (2025). https://doi.org/10.1007/978-3-031-92369-2_15.
 ```
 @inproceedings{Berg2025CrossingImages,
   author =       {van den Berg, Nicky J. and Sherry, Finn M. and Berendschot, Tos T.J.M. and Duits, Remco},
@@ -39,8 +39,8 @@ If you use this code in your own work, please cite our paper:
   publisher =    {Springer},
   year =         {2025},
   address =      {Totnes, United Kingdom},
-  pages =        {},
-  doi =          {},
-  editor =       {}
+  pages =        {192--204},
+  doi =          {10.1007/978-3-031-92369-2_15},
+  editor =       {Bubba, Tatiana and Papafitsoros, Kostas and Gazzola, Silvia and Pereyra, Marcelo and Schönlieb, Carola}
 }
 ```

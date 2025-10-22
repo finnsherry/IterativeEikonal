@@ -241,9 +241,7 @@ def eikonal_solver(
     if G_np is None:
         G_np = np.ones(2)
     G_inv = ti.Vector(invert_metric(G_np), ti.f32)
-    # Heuristic, so that W does not become negative.
-    # The sqrt(2) comes from the fact that the norm of the gradient consists of
-    # 2 terms.
+    # Optimal step size for Rouy-Tourin scheme.
     ε = dε * dxy / np.sqrt(2 * G_inv.max())  # * cost_np.min()
     if n_check is None:  # Only check convergence at n_max
         n_check = n_max
@@ -403,9 +401,7 @@ def eikonal_solver_multi_source(
     if G_np is None:
         G_np = np.ones(2)
     G_inv = ti.Vector(invert_metric(G_np), ti.f32)
-    # Heuristic, so that W does not become negative.
-    # The sqrt(2) comes from the fact that the norm of the gradient consists of
-    # 2 terms.
+    # Optimal step size for Rouy-Tourin scheme.
     ε = dε * dxy / np.sqrt(2 * G_inv.max())  # * cost_np.min()
     if n_check is None:  # Only check convergence at n_max
         n_check = n_max
@@ -655,9 +651,7 @@ def eikonal_solver_uniform(
     if G_np is None:
         G_np = np.ones(2)
     G_inv = ti.Vector(invert_metric(G_np), ti.f32)
-    # Heuristic, so that W does not become negative.
-    # The sqrt(2) comes from the fact that the norm of the gradient consists of
-    # 2 terms.
+    # Optimal step size for Rouy-Tourin scheme.
     ε = dε * dxy / np.sqrt(2 * G_inv.max())
     if n_check is None:  # Only check convergence at n_max
         n_check = n_max
@@ -790,9 +784,7 @@ def eikonal_solver_multi_source_uniform(
     if G_np is None:
         G_np = np.ones(2)
     G_inv = ti.Vector(invert_metric(G_np), ti.f32)
-    # Heuristic, so that W does not become negative.
-    # The sqrt(2) comes from the fact that the norm of the gradient consists of
-    # 2 terms.
+    # Optimal step size for Rouy-Tourin scheme.
     ε = dε * dxy / np.sqrt(2 * G_inv.max())
     if n_check is None:  # Only check convergence at n_max
         n_check = n_max

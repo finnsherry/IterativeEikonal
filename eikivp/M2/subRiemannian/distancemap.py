@@ -339,10 +339,8 @@ def eikonal_solver(
     print("Solving Eikonal PDE data-driven left invariant metric.")
 
     # Set hyperparameters.
-    # Heuristic, so that W does not become negative.
-    # The sqrt(2) comes from the fact that the norm of the gradient consists of
-    # 2 terms.
-    ε = dε * (dxy / (1 + ξ**-2)) / np.sqrt(2)  # * cost_np.min()
+    # Optimal step size for Rouy-Tourin scheme.
+    ε = dε / np.sqrt(1 / (ξ * dxy) ** 2 + 1 / dθ**2)  # * cost_np.min()
     print(f"ε = {ε}")
     if n_check is None:  # Only check convergence at n_max
         n_check = n_max
@@ -524,10 +522,8 @@ def eikonal_solver_multi_source(
     print("Solving Eikonal PDE data-driven left invariant metric.")
 
     # Set hyperparameters.
-    # Heuristic, so that W does not become negative.
-    # The sqrt(2) comes from the fact that the norm of the gradient consists of
-    # 2 terms.
-    ε = dε * (dxy / (1 + ξ**-2)) / np.sqrt(2)  # * cost_np.min()
+    # Optimal step size for Rouy-Tourin scheme.
+    ε = dε / np.sqrt(1 / (ξ * dxy) ** 2 + 1 / dθ**2)  # * cost_np.min()
     print(f"ε = {ε}")
     if n_check is None:  # Only check convergence at n_max
         n_check = n_max
@@ -797,10 +793,8 @@ def eikonal_solver_uniform(
           DOI:10.1137/15M1018460.
     """
     # Set hyperparameters.
-    # Heuristic, so that W does not become negative.
-    # The sqrt(2) comes from the fact that the norm of the gradient consists of
-    # 2 terms.
-    ε = dε * (dxy / (1 + ξ**-2)) / np.sqrt(2)
+    # Optimal step size for Rouy-Tourin scheme.
+    ε = dε / np.sqrt(1 / (ξ * dxy) ** 2 + 1 / dθ**2)
     print(f"ε = {ε}")
     if n_check is None:  # Only check convergence at n_max
         n_check = n_max
@@ -952,10 +946,8 @@ def eikonal_solver_multi_source_uniform(
           DOI:10.1137/15M1018460.
     """
     # Set hyperparameters.
-    # Heuristic, so that W does not become negative.
-    # The sqrt(2) comes from the fact that the norm of the gradient consists of
-    # 2 terms.
-    ε = dε * (dxy / (1 + ξ**-2)) / np.sqrt(2)
+    # Optimal step size for Rouy-Tourin scheme.
+    ε = dε / np.sqrt(1 / (ξ * dxy) ** 2 + 1 / dθ**2)
     print(f"ε = {ε}")
     if n_check is None:  # Only check convergence at n_max
         n_check = n_max

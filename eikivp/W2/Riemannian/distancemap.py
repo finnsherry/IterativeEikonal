@@ -341,10 +341,10 @@ def eikonal_solver(
 
     # Set hyperparameters
     G_inv = ti.Vector(invert_metric(G_np), ti.f32)
-    # Heuristic, so that W does not become negative.
-    # The sqrt(3) comes from the fact that the norm of the gradient consists of
-    # 3 terms.
-    ε = dε * (min(dα, dβ, dφ) / G_inv.max()) / np.sqrt(3)  # * cost_np.min()
+    # Optimal step size for Rouy-Tourin scheme.
+    ε = dε / np.sqrt(
+        (G_inv[0] + G_inv[1] + G_inv[2]) / min(dα, dβ, dφ) ** 2
+    )  # * cost_np.min()
     if n_check is None:  # Only check convergence at n_max
         n_check = n_max
     N_check = int(n_max / n_check)
@@ -547,10 +547,10 @@ def eikonal_solver_multi_source(
 
     # Set hyperparameters
     G_inv = ti.Vector(invert_metric(G_np), ti.f32)
-    # Heuristic, so that W does not become negative.
-    # The sqrt(3) comes from the fact that the norm of the gradient consists of
-    # 3 terms.
-    ε = dε * (min(dα, dβ, dφ) / G_inv.max()) / np.sqrt(3)  # * cost_np.min()
+    # Optimal step size for Rouy-Tourin scheme.
+    ε = dε / np.sqrt(
+        (G_inv[0] + G_inv[1] + G_inv[2]) / min(dα, dβ, dφ) ** 2
+    )  # * cost_np.min()
     if n_check is None:  # Only check convergence at n_max
         n_check = n_max
     N_check = int(n_max / n_check)
@@ -894,10 +894,10 @@ def eikonal_solver_uniform(
     """
     # Set hyperparameters.
     G_inv = ti.Vector(invert_metric(G_np), ti.f32)
-    # Heuristic, so that W does not become negative.
-    # The sqrt(3) comes from the fact that the norm of the gradient consists of
-    # 3 terms.
-    ε = dε * (min(dα, dβ, dφ) / G_inv.max()) / np.sqrt(3)  # * cost_np.min()
+    # Optimal step size for Rouy-Tourin scheme.
+    ε = dε / np.sqrt(
+        (G_inv[0] + G_inv[1] + G_inv[2]) / min(dα, dβ, dφ) ** 2
+    )  # * cost_np.min()
     if n_check is None:  # Only check convergence at n_max
         n_check = n_max
     N_check = int(n_max / n_check)
@@ -1068,10 +1068,10 @@ def eikonal_solver_multi_source_uniform(
     """
     # Set hyperparameters.
     G_inv = ti.Vector(invert_metric(G_np), ti.f32)
-    # Heuristic, so that W does not become negative.
-    # The sqrt(3) comes from the fact that the norm of the gradient consists of
-    # 3 terms.
-    ε = dε * (min(dα, dβ, dφ) / G_inv.max()) / np.sqrt(3)  # * cost_np.min()
+    # Optimal step size for Rouy-Tourin scheme.
+    ε = dε / np.sqrt(
+        (G_inv[0] + G_inv[1] + G_inv[2]) / min(dα, dβ, dφ) ** 2
+    )  # * cost_np.min()
     if n_check is None:  # Only check convergence at n_max
         n_check = n_max
     N_check = int(n_max / n_check)

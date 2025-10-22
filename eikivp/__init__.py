@@ -239,7 +239,7 @@ def eikonal_solver_M2(
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(
-                f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
+                "When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_M2_sub_Riemannian(
             cost,
@@ -260,7 +260,7 @@ def eikonal_solver_M2(
     elif controller == "plus":
         if ξ is None:
             raise ValueError(
-                f"When using the plus controller you must pass the the stiffness parameter ξ!"
+                "When using the plus controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_M2_plus(
             cost,
@@ -382,7 +382,7 @@ def eikonal_solver_M2_uniform(
     if controller == "Riemannian":
         if G is None:
             raise ValueError(
-                f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
+                "When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
             )
         W, grad_W = eikonal_solver_M2_Riemannian_uniform(
             domain_shape,
@@ -401,7 +401,7 @@ def eikonal_solver_M2_uniform(
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(
-                f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
+                "When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_M2_sub_Riemannian_uniform(
             domain_shape,
@@ -420,7 +420,7 @@ def eikonal_solver_M2_uniform(
     elif controller == "plus":
         if ξ is None:
             raise ValueError(
-                f"When using the plus controller you must pass the the stiffness parameter ξ!"
+                "When using the plus controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_M2_plus_uniform(
             domain_shape,
@@ -524,7 +524,7 @@ def geodesic_back_tracking_M2(
     if controller == "Riemannian":
         if G is None:
             raise ValueError(
-                f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
+                "When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
             )
         γ = geodesic_back_tracking_M2_Riemannian(
             grad_W,
@@ -544,7 +544,7 @@ def geodesic_back_tracking_M2(
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(
-                f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
+                "When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
             )
         γ = geodesic_back_tracking_M2_sub_Riemannian(
             grad_W,
@@ -564,7 +564,7 @@ def geodesic_back_tracking_M2(
     elif controller == "plus":
         if ξ is None:
             raise ValueError(
-                f"When using the plus controller you must pass the the stiffness parameter ξ!"
+                "When using the plus controller you must pass the the stiffness parameter ξ!"
             )
         γ = geodesic_back_tracking_M2_plus(
             grad_W,
@@ -695,7 +695,7 @@ def eikonal_solver_multi_source_M2(
     if controller == "Riemannian":
         if G is None:
             raise ValueError(
-                f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
+                "When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
             )
         W, grad_W = eikonal_solver_multi_source_M2_Riemannian(
             cost,
@@ -716,7 +716,7 @@ def eikonal_solver_multi_source_M2(
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(
-                f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
+                "When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_multi_source_M2_sub_Riemannian(
             cost,
@@ -737,7 +737,7 @@ def eikonal_solver_multi_source_M2(
     elif controller == "plus":
         if ξ is None:
             raise ValueError(
-                f"When using the plus controller you must pass the the stiffness parameter ξ!"
+                "When using the plus controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_multi_source_M2_plus(
             cost,
@@ -859,7 +859,7 @@ def eikonal_solver_multi_source_M2_uniform(
     if controller == "Riemannian":
         if G is None:
             raise ValueError(
-                f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
+                "When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
             )
         W, grad_W = eikonal_solver_multi_source_M2_Riemannian_uniform(
             domain_shape,
@@ -878,7 +878,7 @@ def eikonal_solver_multi_source_M2_uniform(
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(
-                f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
+                "When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_multi_source_M2_sub_Riemannian_uniform(
             domain_shape,
@@ -897,7 +897,7 @@ def eikonal_solver_multi_source_M2_uniform(
     elif controller == "plus":
         if ξ is None:
             raise ValueError(
-                f"When using the plus controller you must pass the the stiffness parameter ξ!"
+                "When using the plus controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_multi_source_M2_plus_uniform(
             domain_shape,
@@ -1002,7 +1002,7 @@ def geodesic_back_tracking_multi_source_M2(
     if controller == "Riemannian":
         if G is None:
             raise ValueError(
-                f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
+                "When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
             )
         γ = geodesic_back_tracking_multi_source_M2_Riemannian(
             grad_W,
@@ -1022,7 +1022,7 @@ def geodesic_back_tracking_multi_source_M2(
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(
-                f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
+                "When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
             )
         γ = geodesic_back_tracking_multi_source_M2_sub_Riemannian(
             grad_W,
@@ -1042,7 +1042,7 @@ def geodesic_back_tracking_multi_source_M2(
     elif controller == "plus":
         if ξ is None:
             raise ValueError(
-                f"When using the plus controller you must pass the the stiffness parameter ξ!"
+                "When using the plus controller you must pass the the stiffness parameter ξ!"
             )
         γ = geodesic_back_tracking_multi_source_M2_plus(
             grad_W,
@@ -1241,7 +1241,7 @@ def eikonal_solver_W2(
     if controller == "Riemannian":
         if G is None:
             raise ValueError(
-                f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
+                "When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
             )
         W, grad_W = eikonal_solver_W2_Riemannian(
             cost,
@@ -1264,7 +1264,7 @@ def eikonal_solver_W2(
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(
-                f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
+                "When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_W2_sub_Riemannian(
             cost,
@@ -1287,7 +1287,7 @@ def eikonal_solver_W2(
     elif controller == "plus":
         if ξ is None:
             raise ValueError(
-                f"When using the plus controller you must pass the the stiffness parameter ξ!"
+                "When using the plus controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_W2_plus(
             cost,
@@ -1310,7 +1310,7 @@ def eikonal_solver_W2(
         )
     else:
         raise ValueError(
-            f"""Controller "{controller}" is not supported! Choose one of "Riemannian", "sub-Riemannian", or "plus"."""
+            """Controller "{controller}" is not supported! Choose one of "Riemannian", "sub-Riemannian", or "plus"."""
         )
     return W, grad_W
 
@@ -1419,7 +1419,7 @@ def eikonal_solver_W2_uniform(
     if controller == "Riemannian":
         if G is None:
             raise ValueError(
-                f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
+                "When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
             )
         W, grad_W = eikonal_solver_W2_Riemannian_uniform(
             domain_shape,
@@ -1439,7 +1439,7 @@ def eikonal_solver_W2_uniform(
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(
-                f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
+                "When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_W2_sub_Riemannian_uniform(
             domain_shape,
@@ -1459,7 +1459,7 @@ def eikonal_solver_W2_uniform(
     elif controller == "plus":
         if ξ is None:
             raise ValueError(
-                f"When using the plus controller you must pass the the stiffness parameter ξ!"
+                "When using the plus controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_W2_plus_uniform(
             domain_shape,
@@ -1570,7 +1570,7 @@ def geodesic_back_tracking_W2(
     if controller == "Riemannian":
         if G is None:
             raise ValueError(
-                f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
+                "When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
             )
         γ = geodesic_back_tracking_W2_Riemannian(
             grad_W,
@@ -1592,7 +1592,7 @@ def geodesic_back_tracking_W2(
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(
-                f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
+                "When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
             )
         γ = geodesic_back_tracking_W2_sub_Riemannian(
             grad_W,
@@ -1614,7 +1614,7 @@ def geodesic_back_tracking_W2(
     elif controller == "plus":
         if ξ is None:
             raise ValueError(
-                f"When using the plus controller you must pass the the stiffness parameter ξ!"
+                "When using the plus controller you must pass the the stiffness parameter ξ!"
             )
         γ = geodesic_back_tracking_W2_plus(
             grad_W,
@@ -1754,7 +1754,7 @@ def eikonal_solver_multi_source_W2(
     if controller == "Riemannian":
         if G is None:
             raise ValueError(
-                f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
+                "When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
             )
         W, grad_W = eikonal_solver_multi_source_W2_Riemannian(
             cost,
@@ -1777,7 +1777,7 @@ def eikonal_solver_multi_source_W2(
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(
-                f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
+                "When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_multi_source_W2_sub_Riemannian(
             cost,
@@ -1800,7 +1800,7 @@ def eikonal_solver_multi_source_W2(
     elif controller == "plus":
         if ξ is None:
             raise ValueError(
-                f"When using the plus controller you must pass the the stiffness parameter ξ!"
+                "When using the plus controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_multi_source_W2_plus(
             cost,
@@ -1932,7 +1932,7 @@ def eikonal_solver_multi_source_W2_uniform(
     if controller == "Riemannian":
         if G is None:
             raise ValueError(
-                f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
+                "When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
             )
         W, grad_W = eikonal_solver_multi_source_W2_Riemannian_uniform(
             domain_shape,
@@ -1953,7 +1953,7 @@ def eikonal_solver_multi_source_W2_uniform(
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(
-                f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
+                "When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_multi_source_W2_sub_Riemannian_uniform(
             domain_shape,
@@ -1974,7 +1974,7 @@ def eikonal_solver_multi_source_W2_uniform(
     elif controller == "plus":
         if ξ is None:
             raise ValueError(
-                f"When using the plus controller you must pass the the stiffness parameter ξ!"
+                "When using the plus controller you must pass the the stiffness parameter ξ!"
             )
         W, grad_W = eikonal_solver_multi_source_W2_plus_uniform(
             domain_shape,
@@ -2087,7 +2087,7 @@ def geodesic_back_tracking_multi_source_W2(
     if controller == "Riemannian":
         if G is None:
             raise ValueError(
-                f"When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
+                "When using the Riemannian controller you must pass the entire diagonal of the left invariant metric tensor G!"
             )
         γ = geodesic_back_tracking_multi_source_W2_Riemannian(
             grad_W,
@@ -2109,7 +2109,7 @@ def geodesic_back_tracking_multi_source_W2(
     elif controller == "sub-Riemannian":
         if ξ is None:
             raise ValueError(
-                f"When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
+                "When using the sub-Riemannian controller you must pass the the stiffness parameter ξ!"
             )
         γ = geodesic_back_tracking_multi_source_W2_sub_Riemannian(
             grad_W,
@@ -2131,7 +2131,7 @@ def geodesic_back_tracking_multi_source_W2(
     elif controller == "plus":
         if ξ is None:
             raise ValueError(
-                f"When using the plus controller you must pass the the stiffness parameter ξ!"
+                "When using the plus controller you must pass the the stiffness parameter ξ!"
             )
         γ = geodesic_back_tracking_multi_source_W2_plus(
             grad_W,
